@@ -1,1 +1,9 @@
 .env
+library/*
+!library/.gitkeep
+.idea/
+*.xml
+.DS_Store
+__pycache__/
+*.pyc
+build/
