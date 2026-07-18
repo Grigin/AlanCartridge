@@ -29,6 +29,37 @@ static const uint16_t PAL[16] = {
 // 0 BLACK 1 NAVY 2 PLUM 3 GREEN 4 BROWN 5 GREY 6 SILVER 7 WHITE
 // 8 RED 9 ORANGE 10 YELLOW 11 LIME 12 SKY 13 LILAC 14 PINK 15 PEACH
 
+// Sprites — 8x8 pixel art baked from assets/ (regenerate: python spritegen.py)
+#include "sprites.h"
+// Every sprite draws 16x16 on screen by default; SF_SMALL = 8x8, SF_BIG =
+// 32x32. Ids below SPR16_BASE are 8x8 texels (scaled up); ids at/above it
+// are native 16x16 texels (4x the detail, same footprint).
+enum { SF_FLIPX = 1, SF_FLIPY = 2, SF_BIG = 4, SF_SMALL = 8 };
+static void _sprBlit(int id, int x, int y, uint8_t flags, int tint) {
+  if (id < 0 || id >= SPR_COUNT) return;
+  bool b16 = id >= SPR16_BASE;
+  const uint8_t* d = b16 ? SPR16_PX[id - SPR16_BASE] : SPR_PX[id];
+  int n = b16 ? 16 : 8;                      // texel grid side
+  int s = (flags & SF_SMALL) ? 1 : (flags & SF_BIG) ? 4 : 2;
+  if (b16) s >>= 1;                          // native 16x16 draws at half scale
+  for (int py = 0; py < n; py++) for (int px = 0; px < n; px++) {
+    uint8_t v = d[(py * n + px) >> 1];
+    v = (px & 1) ? (v & 0x0F) : (v >> 4);
+    if (!v) continue;                        // nibble 0 = transparent
+    uint16_t c = PAL[tint >= 0 ? tint : v];
+    int dx = (flags & SF_FLIPX) ? n - 1 - px : px;
+    int dy = (flags & SF_FLIPY) ? n - 1 - py : py;
+    if (s == 0) {                            // 16-bank SF_SMALL: sample to 8x8
+      if ((px | py) & 1) continue;
+      cv.drawPixel(x + dx / 2, y + dy / 2, c);
+    }
+    else if (s == 1) cv.drawPixel(x + dx, y + dy, c);
+    else             cv.fillRect(x + dx * s, y + dy * s, s, s, c);
+  }
+}
+void spr(int id, int x, int y, uint8_t flags = 0)  { _sprBlit(id, x, y, flags, -1); }
+void sprT(int id, int x, int y, uint8_t col, uint8_t flags = 0) { _sprBlit(id, x, y, flags, col & 15); }
+
 // Input
 struct Input {
   int8_t dx = 0, dy = 0;   // normalized d-pad, -1/0/1 (level, every frame)
@@ -111,12 +142,15 @@ extern const char* GAME_TITLE;
 extern const char* GAME_BLURB;
 extern const uint32_t GAME_SEED;
 extern const int GAME_LIVES;                 // starting lives (1..9)
+extern const int GAME_GOAL;                  // objective count; engine wins at it
+extern const char* GAME_VERB;                // HUD verb, e.g. "CATCH"
+extern const char* GAME_HINT;                // title-card control hint, <= 20 chars
 void gameInit();                             // reset game state
 void gameUpdate(float dt);                   // logic @30fps; dt = 1/30
 void gameDraw();                             // draw world on cv (engine clears+blits)
 
 // Engine services for games
-long  score_ = 0;  int lives_ = 3;
+long  score_ = 0;  int lives_ = 3;  int progress_ = 0;
 enum ShellState { TITLE, PLAY, OVER };
 ShellState shell = TITLE;  bool lastWin = false;
 uint32_t stateAt = 0;
@@ -126,6 +160,7 @@ int   rndi(int a, int b) { return random(a, b + 1); }          // inclusive
 void  eScore(int d) { score_ += d; }
 void  eLoseLife();                            // forward decl
 void  eGameOver(bool win);
+void  eProgress(int d);                       // goal progress; auto-win at GAME_GOAL
 void  sfx(const char*) {}                     // no buzzer wired — free port upgrade later
 
 // Shell internals
@@ -150,23 +185,33 @@ void eLoseLife() {
   Serial.printf("{\"ev\":\"life\",\"left\":%d}\n", lives_);
   if (lives_ <= 0) eGameOver(false);
 }
+void eProgress(int d) {
+  if (shell != PLAY) return;
+  progress_ += d;
+  if (progress_ < 0) progress_ = 0;
+  if (progress_ >= GAME_GOAL) { progress_ = GAME_GOAL; eGameOver(true); }
+}
 
 static void enterTitle() {
   shell = TITLE; stateAt = millis();
-  score_ = 0; lives_ = GAME_LIVES;
+  score_ = 0; lives_ = GAME_LIVES; progress_ = 0;
   cv.fillScreen(PAL[1]);
   cv.setTextSize(2); cv.setTextColor(PAL[10]);
-  cv.setCursor(8, 14); cv.print(GAME_TITLE);
+  cv.setCursor(8, 12); cv.print(GAME_TITLE);
   cv.setTextSize(1); cv.setTextColor(PAL[6]);
-  cv.setCursor(8, 44); cv.print(GAME_BLURB);
-  cv.setCursor(8, 66); cv.setTextColor(PAL[7]); cv.print("press CENTRE to play");
+  cv.setCursor(8, 38); cv.print(GAME_BLURB);
+  cv.setTextColor(PAL[10]);
+  cv.setCursor(8, 50); cv.printf("%s %d", GAME_VERB, GAME_GOAL);
+  cv.setTextColor(PAL[12]);
+  cv.setCursor(8, 60); cv.print(GAME_HINT);
+  cv.setCursor(8, 70); cv.setTextColor(PAL[7]); cv.print("CENTRE to start");
   tft.drawRGBBitmap(0, 0, cv.getBuffer(), W, H);
   mxPips(25, matrix.Color(40, 40, 120));
   Serial.printf("{\"ev\":\"title\",\"title\":\"%s\"}\n", GAME_TITLE);
 }
 static void enterPlay() {
   randomSeed(GAME_SEED);
-  score_ = 0; lives_ = GAME_LIVES; inp.t = 0;
+  score_ = 0; lives_ = GAME_LIVES; progress_ = 0; inp.t = 0;
   gameInit(); showLives();
   shell = PLAY; stateAt = millis();
   Serial.println("{\"ev\":\"play\"}");
@@ -249,6 +294,11 @@ void engineLoop() {
       gameDraw();
       cv.setTextSize(1); cv.setTextColor(PAL[6]);   // engine score strip
       cv.setCursor(2, 1); cv.printf("%ld", score_);
+      cv.setTextColor(PAL[10]);                     // goal readout + bar
+      cv.setCursor(82, 1); cv.printf("%s %d/%d", GAME_VERB, progress_, GAME_GOAL);
+      cv.fillRect(82, 8, 76, 1, PAL[5]);
+      if (GAME_GOAL > 0 && progress_ > 0)
+        cv.fillRect(82, 8, 76 * progress_ / GAME_GOAL, 1, PAL[11]);
       tft.drawRGBBitmap(0, 0, cv.getBuffer(), W, H);
       break;
     case OVER:

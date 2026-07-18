@@ -7,15 +7,16 @@ from pathlib import Path
 
 import device
 import game_factory
+import ontology
 from config import GAME_FILE, LIB, MODEL
 
 
 def history():
+    """Coords dicts (oldest first) from meta.json — the anti-repeat memory."""
     out = []
-    for d in sorted(LIB.glob("*/design.json")):
+    for m in sorted(LIB.glob("*/meta.json")):
         try:
-            j = json.loads(d.read_text())
-            out.append((j.get("genre", "?"), j.get("mechanic", "?"), j.get("title", "?")))
+            out.append(json.loads(m.read_text()))
         except Exception:
             pass
     return out
@@ -34,16 +35,29 @@ def save(des, code, theme, seconds):
     d.mkdir(parents=True, exist_ok=True)
     (d / "game.ino").write_text(code)
     (d / "design.json").write_text(json.dumps(des, indent=1))
+    coords = {k: des.get(k) for k in ("title", "genre", "objective",
+                                      "genre_objective", "twist", "setting", "pace")}
     (d / "meta.json").write_text(json.dumps(
-        {"theme": theme, "seconds": round(seconds), "model": MODEL,
+        {**coords, "theme": theme, "seconds": round(seconds), "model": MODEL,
          "ts": time.strftime("%Y-%m-%d %H:%M:%S")}, indent=1))
     return d
 
 def forge_one(theme=None, flash=True):
     t0 = time.time()
-    print(f"◆ designing{f' for theme: {theme}' if theme else ''} ...")
-    des = game_factory.design(theme, history())
-    print(f"  → {des['title']} — {des.get('mechanic', '?')} / {des.get('setting', '?')}")
+    hist = history()
+    coords = ontology.roll(hist)
+    print(f"◆ rolled {coords['genre_objective']} · {coords['verb']} {coords['goal']}"
+          f" · twist {coords['twist']} · {coords['pace']} · {coords['setting']}")
+    print(f"◆ skinning{f' for theme: {theme}' if theme else ''} ...")
+    des = game_factory.skin(coords, theme, hist)
+    derrs = game_factory.design_check(des)
+    if derrs:
+        print("  · reskin: " + "; ".join(derrs)[:100])
+        des = game_factory.skin(coords, theme, hist, fix="; ".join(derrs))
+        derrs = game_factory.design_check(des)
+        if derrs:
+            print("  ! design imperfect, forging anyway: " + "; ".join(derrs)[:100])
+    print(f"  → {des['title']} — {des.get('blurb', '')}")
     print("◆ implementing ...")
     code = game_factory.implement(des)
     ok = False
@@ -97,13 +111,13 @@ def flash_lib(path):
 
 def catalogue():
     for d in sorted(LIB.glob("[0-9]*")):
-        meta, des = {}, {}
+        meta = {}
         try:
-            des = json.loads((d / "design.json").read_text())
             meta = json.loads((d / "meta.json").read_text())
         except Exception:
             pass
-        print(f"{d.name:28s} {des.get('mechanic', '?'):8s} "
+        print(f"{d.name:28s} {meta.get('genre_objective') or '?':18s} "
+              f"{meta.get('twist') or '?':9s} {meta.get('setting') or '?':10s} "
               f"{meta.get('seconds', '?')}s  theme: {meta.get('theme') or '—'}")
 
 
