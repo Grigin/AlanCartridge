@@ -10,10 +10,11 @@
 #define TFT_DC     P2_IO2
 #define MATRIX_PIN P4_IO1
 #define DPAD_PIN   P1_IO0
-// Encoder
-// #define ENC_A      P3_IO0
-// #define ENC_B      P3_IO1
-// #define ENC_SW  P3_IO2
+// Encoder — AX22 ports carry 1 analog (IO0) + 2 digital (IO1/IO2);
+// quadrature A/B on the digital pair, push on IO0. Comment out to disable.
+#define ENC_A      P3_IO1
+#define ENC_B      P3_IO2
+// #define ENC_SW  P3_IO0   // enable after A/B verified
 
 // Screen + framebuffer
 static const int W = 160, H = 80;
@@ -62,7 +63,8 @@ static int padBand() {
   return -1;                               // released
 }
 
-// ── Encoder (quadrature, ISR) ────────────────────────────────────────────────
+// Encoder (quadrature, ISR)
+#ifdef ENC_A
 volatile int32_t encCount = 0;
 void IRAM_ATTR encISR() {
   static uint8_t prev = 0;
@@ -71,6 +73,7 @@ void IRAM_ATTR encISR() {
   encCount += T[(prev << 2) | s];
   prev = s;
 }
+#endif
 
 // 5x5 matrix HUD
 Adafruit_NeoPixel matrix(25, MATRIX_PIN, NEO_GRB + NEO_KHZ800);
@@ -92,10 +95,9 @@ void mxDigit(int n, uint32_t col) {
   }
   matrix.show();
 }
-void mxPips(int n, uint32_t col) {           // 0..25 lit pixels (score mode)
+void mxPips(int n, uint32_t col) {           // 0..25 lit; strip order snakes bottom-up
   matrix.clear();
-  for (int i = 0; i < n && i < 25; i++)
-    matrix.setPixelColor(serp(4 - i / 5, (4 - i / 5) % 2 ? 4 - i % 5 : i % 5), col);
+  for (int i = 0; i < n && i < 25; i++) matrix.setPixelColor(i, col);
   matrix.show();
 }
 uint32_t livesColor(int lives, int maxL) {
@@ -180,8 +182,12 @@ static void pollInput() {
   if (stableBand >= 0) { inp.dx = PADMAP[stableBand].dx; inp.dy = PADMAP[stableBand].dy;
                          aNow = PADMAP[stableBand].a; }
   inp.a = aNow && !aPrev; inp.aHeld = aNow; aPrev = aNow;
+#ifdef ENC_A
   noInterrupts(); int32_t ec = encCount; encCount = 0; interrupts();
   inp.enc = (int8_t)constrain(ec / 4, -8, 8); // detents
+#else
+  inp.enc = 0;
+#endif
 #ifdef ENC_SW
   bool bNow = !digitalRead(ENC_SW);
   inp.b = bNow && !bPrev; inp.bHeld = bNow; bPrev = bNow;
@@ -212,9 +218,11 @@ void engineSetup() {
   tft.setSPISpeed(26000000);     // try 40000000 if stable
   matrix.begin(); matrix.setBrightness(20); matrix.show();
   pinMode(DPAD_PIN, INPUT);
+#ifdef ENC_A
   pinMode(ENC_A, INPUT_PULLUP); pinMode(ENC_B, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(ENC_A), encISR, CHANGE);
   attachInterrupt(digitalPinToInterrupt(ENC_B), encISR, CHANGE);
+#endif
 #ifdef ENC_SW
   pinMode(ENC_SW, INPUT_PULLUP);
 #endif

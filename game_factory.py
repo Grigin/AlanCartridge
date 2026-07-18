@@ -30,6 +30,8 @@ def _system():
     return blocks
 
 
+
+
 def ask(prompt, max_tokens=4000):
     r = _get_client().messages.create(
         model=MODEL, max_tokens=max_tokens, system=_system(),
@@ -48,19 +50,24 @@ def design(theme, hist):
     prompt = (
         "Design ONE new game for this console. Respond with ONLY a JSON object:\n"
         '{"title","blurb","genre","setting","characters":[{"name","role"}],'
-        '"entities":[{"name","behavior"}],"mechanic","twist","controls",'
-        '"win_condition","lose_condition","difficulty_ramp","lives":int,"seed":int}\n'
+        '"entities":[{"name","behavior"}],'
+        '"mechanic":"exactly ONE word, chosen from the allowed bins",'
+        '"mechanic_detail":"how it plays, 1-2 sentences",'
+        '"twist","controls","win_condition","lose_condition",'
+        '"difficulty_ramp","lives":int,"seed":int}\n'
         f"Previously made (do NOT repeat a mechanic from the last 5): {hist[-8:]}\n"
-        f"Pick your mechanic from these under-used bins: {fresh}\n"
+        f"Allowed bins for mechanic (pick an under-used one): {fresh}\n"
         "Include at least 2 distinct moving entity behaviours and a twist — "
         "one rule that changes mid-game.\n"
-        "title <= 12 chars ALL CAPS, blurb <= 24 chars. Mechanic must be "
-        "expressible with d-pad + optional encoder. Be weird, be specific."
+        "title <= 12 chars ALL CAPS, blurb <= 24 chars. The game must be "
+        "playable with d-pad + optional encoder. Be weird, be specific."
     )
     if theme:
         prompt += f"\nAudience theme (must be honoured): {theme}"
-    return json.loads(strip_fence(ask(prompt, max_tokens=1500)))
-
+    des = json.loads(strip_fence(ask(prompt, max_tokens=1500)))
+    words = str(des.get("mechanic", "?")).lower().split() or ["?"]
+    des["mechanic"] = words[0].strip(".,;:")
+    return des
 
 def implement(des):
     return strip_fence(ask(
@@ -82,10 +89,37 @@ BANNED = [r"\bdelay\s*\(", r"\bwhile\b", r"\bgoto\b", r"\bmalloc\b", r"\bnew\s",
 REQUIRED = ["GAME_TITLE", "GAME_BLURB", "GAME_SEED", "GAME_LIVES",
             "gameInit", "gameUpdate", "gameDraw"]
 
+def _code_only(code):
+    lines, out, in_block = code.splitlines(), [], False
+    for ln in lines:
+        if in_block:
+            if "*/" in ln:
+                ln, in_block = ln.split("*/", 1)[1], False
+            else:
+                out.append("")
+                continue
+        ln = re.sub(r'"(?:\\.|[^"\\])*"', '""', ln)
+        ln = re.sub(r"'(?:\\.|[^'\\])*'", "''", ln)
+        while "/*" in ln:
+            pre, rest = ln.split("/*", 1)
+            if "*/" in rest:
+                ln = pre + rest.split("*/", 1)[1]
+            else:
+                ln, in_block = pre, True
+        out.append(ln.split("//", 1)[0])
+    return out
+
 
 def static_check(code):
-    errs = [f"banned pattern: {p}" for p in BANNED if re.search(p, code)]
+    clean = _code_only(code)
+    src = code.splitlines()
+    errs = []
+    for pat in BANNED:
+        for n, ln in enumerate(clean, 1):
+            if re.search(pat, ln):
+                errs.append(f"banned `{pat}` on line {n}: {src[n-1].strip()}")
+                break
     errs += [f"missing required symbol: {s}" for s in REQUIRED if s not in code]
-    if code.count("\n") > 220:
+    if len(clean) > 220:
         errs.append("too long (>220 lines)")
     return errs

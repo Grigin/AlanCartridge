@@ -56,9 +56,15 @@ def forge_one(theme=None, flash=True):
                 break
             errs = [log]
         if attempt == 3:
-            print("  ✗ forge failed — previous game still on device")
+            dump = LIB / f"_failed_{time.strftime('%H%M%S')}"
+            dump.mkdir(parents=True, exist_ok=True)
+            (dump / "game.ino").write_text(code)
+            (dump / "errors.txt").write_text("\n".join(errs))
+            print(f"  ✗ forge failed — autopsy in {dump}; previous game still on device")
             return None
-        print(f"  ✗ attempt {attempt} rejected — repairing")
+        print(f"  ✗ attempt {attempt} rejected:")
+        for e in "\n".join(errs).splitlines()[:4]:
+            print(f"      {e[:110]}")
         code = game_factory.repair(code, "\n".join(errs), des)
     d = save(des, code, theme, time.time() - t0)
     print(f"  ✓ compiled in {time.time() - t0:.0f}s → {d.name}")
