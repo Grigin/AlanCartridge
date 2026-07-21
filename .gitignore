@@ -11,4 +11,4 @@ __pycache__/
 build/
 sprite_sheets/*
 *.html
-!gui.html 
+!gui.html

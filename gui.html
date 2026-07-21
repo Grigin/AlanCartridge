@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>INFINITE CARTRIDGE</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕹️</text></svg>">
+<style>
+  /* Press Start 2P (SIL OFL), embedded so the page works offline */
+  @font-face {
+    font-family: 'PS2P';
+    src: url(data:font/woff2;base64,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) format('woff2');
+    font-display: block;
+  }
+  /* device palette: PAL[0] black, PAL[1] #1d2b53, PAL[5] #5f574f grey body,
+     PAL[6] #c2c3c7 sheen, PAL[7] #fff1e8 label, PAL[8] #ff004d stripe */
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body {
+    background: #000; color: #c2c3c7;
+    font: 8px/1.6 'PS2P', 'Courier New', monospace;
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  #wrap {
+    width: 100%; max-width: 860px; margin: 0 auto; padding: 16px;
+    flex: 1; min-height: 0; display: flex; flex-direction: column;
+  }
+
+  /* ── the cartridge, mirroring enterTitle() ─────────────────────────── */
+  #cart {
+    background: #5f574f; border: 2px solid #000; border-radius: 10px;
+    box-shadow: inset 0 3px 0 -1px #c2c3c7;              /* top sheen */
+    padding-bottom: 4px; flex-shrink: 0;
+  }
+  .ridges {
+    height: 14px; margin: 9px 20px 0;
+    background: repeating-linear-gradient(
+      #5f574f 0 2px, #1d2b53 2px 3px, #c2c3c7 3px 4px, #5f574f 4px 5px);
+  }
+  #label {
+    background: #fff1e8; border-radius: 4px; margin: 10px 16px;
+    padding-bottom: 10px;
+  }
+  .stripe { height: 4px; background: #ff004d; margin: 4px 4px 0; }
+  #label h1 {
+    font-size: 14px; font-weight: 400; color: #000; text-align: center;
+    letter-spacing: 1px; margin: 14px 8px 8px;
+  }
+  #status {
+    color: #5f574f; text-align: center; text-transform: uppercase;
+  }
+  #status.on { animation: blink 1s infinite; }
+  #status.err { color: #ff004d; }
+  @keyframes blink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0; } }
+
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: stretch;
+    margin: 2px 16px 8px;
+  }
+  input, button {
+    font: inherit; border: 2px solid #000; border-radius: 2px;
+    padding: 10px 12px 9px; text-transform: uppercase;
+  }
+  input { background: #1d2b53; color: #fff1e8; text-transform: none; }
+  input::placeholder { color: #83769c; }
+  input:focus { outline: none; border-color: #29adff; }
+  #theme { flex: 1; min-width: 160px; }
+  button {
+    cursor: pointer; background: #fff1e8; color: #000;
+    box-shadow: 0 3px 0 #000; white-space: nowrap;
+  }
+  button:hover:not(:disabled) { background: #ffec27; }
+  button:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 1px 0 #000; }
+  button:disabled { opacity: .4; cursor: default; }
+  .primary { background: #ff004d; color: #fff1e8; }
+  .primary:hover:not(:disabled) { background: #ff004d; filter: brightness(1.15); }
+  .danger:not(:disabled) { background: #000; color: #ff004d; border-color: #ff004d; }
+  .pregen { display: flex; }
+  .pregen button { border-radius: 2px 0 0 2px; }
+  .pregen input {
+    width: 58px; border-left: none; border-radius: 0 2px 2px 0;
+    text-align: center; padding-left: 6px; padding-right: 6px;
+  }
+  input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+  #meta {
+    text-align: right; margin: 0 18px 8px;
+    font: 9px/1.4 ui-monospace, Menlo, monospace; color: #c2c3c7a0;
+  }
+
+  /* ── live TFT mirror ───────────────────────────────────────────────── */
+  #bezel {
+    position: relative; width: 512px; max-width: 100%; margin: 0 auto;
+    background: #1a1a24; border: 2px solid #000; border-radius: 12px;
+    padding: 12px; cursor: pointer; box-shadow: 0 4px 0 #000;
+  }
+  #scr {
+    display: block; width: 100%; image-rendering: pixelated;
+    background: #000; border: 2px solid #000;
+  }
+  #nosig {
+    position: absolute; inset: 0; display: flex; align-items: center;
+    justify-content: center; color: #5f574f; letter-spacing: 2px;
+    pointer-events: none;
+  }
+
+  /* ── panes ─────────────────────────────────────────────────────────── */
+  .paneh {
+    display: flex; align-items: center; gap: 10px;
+    color: #83769c; letter-spacing: 2px; margin: 14px 2px 8px;
+  }
+  .paneh button { padding: 6px 10px 5px; box-shadow: 0 2px 0 #000; }
+  #lib {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px; overflow-y: auto; max-height: 32vh; padding: 2px 2px 6px;
+  }
+  .cardg {
+    background: #5f574f; border: 2px solid #000; border-radius: 6px;
+    padding: 5px 5px 6px; cursor: pointer;
+  }
+  .cardg.sel { box-shadow: 0 0 0 3px #ffec27; }
+  .ridg {
+    height: 6px; margin: 1px 8px 5px;
+    background: repeating-linear-gradient(
+      #1d2b53 0 1px, #c2c3c7 1px 2px, #5f574f 2px 4px);
+  }
+  .clabel { background: #fff1e8; border-radius: 2px; padding-bottom: 6px; }
+  .cstripe { height: 3px; background: #ff004d; margin: 3px 3px 5px; }
+  .ct { color: #000; text-align: center; padding: 0 4px; word-break: break-word; }
+  .cm {
+    margin-top: 5px; text-align: center;
+    font: 9px/1.5 ui-monospace, Menlo, monospace; color: #c2c3c7;
+  }
+  .chip { color: #ffec27; }
+
+  #logpane { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  #log {
+    flex: 1; overflow-y: auto; overscroll-behavior: contain;
+    background: #000; border: 2px solid #5f574f; border-radius: 4px;
+    padding: 10px 12px; white-space: pre-wrap; word-break: break-word;
+    font: 12.5px/1.5 ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  }
+  #log div { min-height: 1.2em; }
+  .l-cmd { color: #ff77a8; font-weight: 700; margin-top: .6em; }
+  .l-roll { color: #29adff; }
+  .l-ok { color: #00e436; }
+  .l-err { color: #ff004d; }
+  .l-warn { color: #ffec27; }
+  .l-end { color: #83769c; }
+  .gem { display: inline-block; width: 1.15em; }
+  .gem.live { animation: gemshine .55s steps(1) infinite; }
+  @keyframes gemshine {
+    0% { color: #29adff; }
+    33% { color: #fff1e8; }
+    66% { color: #ffec27; }
+  }
+
+  /* ── dice roll (one block per @roll line from main.py) ─────────────── */
+  .roll { margin: 4px 0 8px; display: flex; align-items: flex-end; gap: 18px; }
+  .dstage {
+    position: relative; height: 92px; width: 208px;
+    flex-shrink: 0; overflow: hidden;
+  }
+  .die {
+    position: absolute; top: 0; left: 0; width: 48px; height: 48px;
+    background: #fff1e8; border: 2px solid #000; border-radius: 8px;
+    box-shadow: 0 3px 0 #000;
+    display: grid; grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+    padding: 6px; gap: 2px;
+  }
+  .die i.p { background: #000; border-radius: 2px; }
+  .rinfo {
+    font: 8px/2 'PS2P', 'Courier New', monospace;
+    flex: 1; min-width: 0; margin-bottom: -4px;  /* centre rows on the resting
+                                                    dice (y 40..88, mid 64) */
+    opacity: 0; transition: opacity .4s;
+  }
+  .rinfo.show { opacity: 1; }
+  .rinfo b { color: #83769c; font-weight: 400; display: inline-block; width: 11ch; }
+  .rinfo span { color: #fff1e8; }
+  .wildtag { color: #ffec27; font-style: normal; }
+
+  /* character card, shown when skinning completes */
+  .skin { display: flex; align-items: center; gap: 18px; margin: 8px 0 10px; }
+  .skin canvas { image-rendering: pixelated; flex-shrink: 0; }
+  .skin .st { font: 10px/1.7 'PS2P', 'Courier New', monospace; color: #fff1e8; }
+  .skin .sb {
+    font: 8px/1.7 'PS2P', 'Courier New', monospace; color: #83769c;
+    margin-top: 5px; max-width: 46ch;
+  }
+
+  /* theme card, shown when the score is baked (one per @music line) */
+  .tune { display: flex; align-items: center; gap: 14px; margin: 8px 0 10px; }
+  .tune button {
+    font: 17px/1 monospace; width: 34px; height: 34px; padding: 0;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; background: #ff004d; color: #fff1e8;
+    border: 2px solid #000; box-shadow: 0 3px 0 #000; cursor: pointer;
+  }
+  .tune button:active { transform: translateY(2px); box-shadow: 0 1px 0 #000; }
+  .tune .tt { font: 10px/1.7 'PS2P', 'Courier New', monospace; color: #fff1e8; }
+  .tune .tt .nb { font-size: 20px; line-height: 0; vertical-align: -4px; }
+  .tune .tb {
+    font: 8px/1.7 'PS2P', 'Courier New', monospace; color: #83769c;
+    margin-top: 5px;
+  }
+  .wavbtn {
+    float: right; font: 12px/1 monospace; padding: 2px 5px 3px;
+    background: #1d2b53; color: #29adff; border: 1px solid #000;
+    cursor: pointer; margin-left: 4px;
+  }
+  .wavbtn.on { background: #ff004d; color: #fff1e8; }
+
+  /* composing block: stage line + live 8-bit waveform, swapped in place
+     for the theme card when the score lands */
+  .compose canvas {
+    display: block; margin: 5px 0 2px 18px;
+    width: 252px; height: 48px; image-rendering: pixelated;
+  }
+
+  ::-webkit-scrollbar { width: 12px; }
+  ::-webkit-scrollbar-thumb { background: #5f574f; border: 3px solid #000; }
+  ::-webkit-scrollbar-track { background: #000; }
+
+  @media (max-width: 620px) {
+    #wrap { padding: 10px; }
+    #lib { grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); }
+    .roll { gap: 10px; }
+    .dstage { width: 170px; }
+  }
+</style>
+</head>
+<body>
+<div id="wrap">
+
+  <div id="cart">
+    <div class="ridges"></div>
+    <div id="label">
+      <div class="stripe"></div>
+      <h1>INFINITE CARTRIDGE</h1>
+      <div id="status">READY</div>
+    </div>
+    <div class="controls">
+      <input id="theme" placeholder="theme (optional) — e.g. crabs in space" autocomplete="off">
+      <button id="b-forge" class="primary">FORGE</button>
+      <button id="b-loop">LOOP</button>
+      <span class="pregen" id="pregen">
+        <button id="b-pregen">PREGEN</button>
+        <input id="n" type="number" min="1" max="20" value="3">
+      </span>
+      <button id="b-stop" class="danger" disabled>STOP</button>
+    </div>
+    <div id="meta"></div>
+  </div>
+
+  <section id="scrpane">
+    <div class="paneh">SCREEN <span id="scrhint">— click to watch</span></div>
+    <div id="bezel">
+      <canvas id="scr" width="160" height="80"></canvas>
+      <div id="nosig">SCREEN OFF</div>
+    </div>
+  </section>
+
+  <section id="libpane">
+    <div class="paneh">LIBRARY <span id="libcount"></span>
+      <button id="b-flash" disabled>FLASH</button></div>
+    <div id="lib"></div>
+  </section>
+
+  <section id="logpane">
+    <div class="paneh">LOG<button id="b-dice" style="display:none">DICE</button><button id="b-tetris" style="display:none">TETRIS</button></div>
+    <div id="log"></div>
+  </section>
+
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g,
+  c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let cursor = 0, sel = null, lastLib = '', busyNow = false;
+const DEV = location.pathname.startsWith('/dev');   // library, pregen, screen: dev-only
+if (!DEV) {
+  $('libpane').style.display = 'none';
+  $('pregen').style.display = 'none';
+  $('scrpane').style.display = 'none';
+}
+
+function cls(l) {
+  if (l.startsWith('$')) return 'l-cmd';
+  if (l.startsWith('— exit')) return 'l-end';
+  if (l.includes('✗')) return 'l-err';
+  if (l.includes('✓')) return 'l-ok';
+  if (l.startsWith('◆')) return 'l-roll';
+  const t = l.trim();
+  if (t.startsWith('!') || t.startsWith('·') || t.startsWith('—')) return 'l-warn';
+  return '';
+}
+
+const PIPS = {1: [4], 2: [0, 8], 3: [0, 4, 8], 4: [0, 2, 6, 8],
+              5: [0, 2, 4, 6, 8], 6: [0, 3, 6, 2, 5, 8]};
+const rface = () => 1 + Math.floor(Math.random() * 6);
+
+function dieFace(el, n) {
+  el.innerHTML = '';
+  for (let i = 0; i < 9; i++) {
+    const p = document.createElement('i');
+    if (PIPS[n].includes(i)) p.className = 'p';
+    el.appendChild(p);
+  }
+}
+
+function addDice(data) {
+  const w = document.createElement('div');
+  w.className = 'roll';
+  w.innerHTML =
+    '<div class="dstage"><div class="die"></div><div class="die"></div></div>' +
+    '<div class="rinfo"></div>';
+  $('log').appendChild(w);
+  const av = String(data.avatar || '?').replace(/^SPR_?/, '')
+    .toLowerCase().replace(/_/g, ' ');
+  const mech = [data.verb ? String(data.verb).toLowerCase() + ' ' + data.goal : '',
+                data.twist && data.twist !== 'none' ? data.twist : '']
+    .filter(Boolean).join(' · ');
+  const row = (k, v) => `<div><b>${k}</b><span>${v}</span></div>`;
+  w.querySelector('.rinfo').innerHTML =
+    row('GENRE', esc(data.genre || '?')) +
+    row('MECHANIC', esc(mech || '?')) +
+    row('CHARACTER', esc(av)) +
+    row('SETTING', esc(data.setting || '?') +
+      (data.wild_kind ? ` <i class="wildtag">WILD:${esc(data.wild_kind)}</i>` : ''));
+  rollDice(w);
+}
+
+const SND = new Audio('/dice.mp3');            // clatter; the settle is at 0:02
+SND.preload = 'auto';
+
+function rollDice(w) {
+  const stage = w.querySelector('.dstage');
+  const [ea, eb] = stage.querySelectorAll('.die');
+  const info = w.querySelector('.rinfo');
+  const fa = rface(), fb = rface();            // faces random on every roll
+  const floor = 40, cx = Math.max(stage.clientWidth / 2, 90);
+  const rest = [cx - 56, cx + 8];
+  dieFace(ea, fa); dieFace(eb, fb);
+  const done = () => {
+    ea.style.transform = `translate(${rest[0]}px, ${floor}px)`;
+    eb.style.transform = `translate(${rest[1]}px, ${floor}px)`;
+    dieFace(ea, fa); dieFace(eb, fb);
+    info.classList.add('show');
+  };
+  try { SND.currentTime = 0; } catch (_) {}
+  const p = SND.play();                        // needs a prior user gesture
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return done();
+  const LAND = 2000, COLL = 700;               // touchdown pinned to 0:02
+  const off = Math.min(180, cx - 40);
+  const a0 = cx - off - 48, b0 = cx + off;     // entry x, off both stage edges
+  const ac = cx - 52, bc = cx + 4;             // collision x: faces touching
+  const lerp = (u, v, t) => u + (v - u) * t;
+  let t0 = 0, started = false, hit = false, tum = 0, held = false;
+  function frame(ts) {
+    const el = ts - t0;
+    if (el >= LAND) return done();
+    let ax, bx, ay, by;
+    if (el < COLL) {                           // fly in, falling
+      const t = el / COLL;
+      ax = lerp(a0, ac, t); bx = lerp(b0, bc, t);
+      ay = -64 + 70 * t * t; by = -80 + 86 * t * t;
+      if (!hit && el > COLL - 60) {            // impact shake
+        hit = true;
+        stage.style.transform = 'translate(2px,1px)';
+        setTimeout(() => stage.style.transform = '', 70);
+      }
+    } else {                                   // bounce apart, arc to rest
+      const t = (el - COLL) / (LAND - COLL);
+      const e = 1 - (1 - t) * (1 - t);
+      ax = lerp(ac, rest[0], e); bx = lerp(bc, rest[1], e);
+      ay = by = lerp(6, floor, t) - 80 * t * (1 - t);
+    }
+    if (el < 1600) {                           // tumble, then hold final faces
+      if (el - tum > 90) { tum = el; dieFace(ea, rface()); dieFace(eb, rface()); }
+    } else if (!held) { held = true; dieFace(ea, fa); dieFace(eb, fb); }
+    ea.style.transform =                       // 4px grid = chunky 8-bit motion
+      `translate(${Math.round(ax / 4) * 4}px, ${Math.round(ay / 4) * 4}px)`;
+    eb.style.transform =
+      `translate(${Math.round(bx / 4) * 4}px, ${Math.round(by / 4) * 4}px)`;
+    requestAnimationFrame(frame);
+  }
+  const begin = () => {                        // clock starts when audio does,
+    if (started) return;                       // so landing rides the sound
+    started = true;
+    t0 = performance.now();
+    requestAnimationFrame(frame);
+  };
+  (p || Promise.resolve()).then(begin).catch(begin);
+  setTimeout(begin, 300);                      // audio blocked/slow — go anyway
+}
+
+async function addChar(data) {
+  const log = $('log');
+  const stick = log.scrollTop + log.clientHeight >= log.scrollHeight - 40;
+  const w = document.createElement('div');
+  w.className = 'skin';
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = 96;
+  const tx = document.createElement('div');
+  tx.innerHTML = `<div class="st">${esc(data.title || '?')}</div>` +
+                 `<div class="sb">${esc(data.blurb || '')}</div>`;
+  w.appendChild(cv);
+  w.appendChild(tx);
+  log.appendChild(w);
+  if (stick) log.scrollTop = log.scrollHeight;
+  try {
+    const r = await fetch('/api/sprite/' + encodeURIComponent(data.avatar || ''));
+    if (!r.ok) return;
+    const s = await r.json();
+    const sc = 96 / s.w, ctx = cv.getContext('2d');
+    const draw = f => {
+      ctx.clearRect(0, 0, 96, 96);
+      s.frames[f].forEach((row, y) => row.forEach((v, x) => {
+        if (v) { ctx.fillStyle = s.pal[v]; ctx.fillRect(x * sc, y * sc, sc, sc); }
+      }));
+    };
+    draw(0);
+    if (s.frames.length > 1) {          // walk cycle, ~device cadence (30fps>>3)
+      let f = 0;
+      const iv = setInterval(() => {
+        if (!cv.isConnected) return clearInterval(iv);
+        draw(f = 1 - f);
+      }, 250);
+    }
+  } catch (_) {}
+}
+
+const TUNE = new Audio();                // one theme snippet plays at a time
+let tuneBtn = null;
+function tuneIdle() {
+  if (tuneBtn) {
+    tuneBtn.textContent = tuneBtn.dataset.g;
+    tuneBtn.classList.remove('on');
+    tuneBtn = null;
+  }
+}
+TUNE.onended = tuneIdle;
+function playWav(dir, btn) {
+  const same = tuneBtn === btn && !TUNE.paused;
+  tuneIdle();
+  TUNE.pause();
+  if (same) return;                      // second press = stop
+  TUNE.src = '/api/wav/' + encodeURIComponent(dir);
+  TUNE.play().catch(() => {});
+  tuneBtn = btn;
+  btn.textContent = '■';
+  btn.classList.add('on');
+}
+
+const composeQ = [];                   // composing blocks awaiting their score
+function startWave() {
+  const cv = document.createElement('canvas');
+  cv.width = 63; cv.height = 12;       // 32 one-px bars, ×4 CSS = chunky pixels
+  const ctx = cv.getContext('2d');
+  let t = 0;
+  cv._iv = setInterval(() => {
+    if (!cv.isConnected) return clearInterval(cv._iv);
+    ctx.clearRect(0, 0, 63, 12);
+    ctx.fillStyle = '#fff1e8';
+    for (let i = 0; i < 32; i++) {
+      const h = 2 + Math.round((Math.sin(i * .55 - t * .5) * .5 + .5) * 9);
+      ctx.fillRect(i * 2, (12 - h) >> 1, 1, h);
+    }
+    t++;
+  }, 90);
+  return cv;
+}
+function killWave(blk) {
+  const cv = blk.querySelector('canvas');
+  if (cv) { clearInterval(cv._iv); cv.remove(); }
+}
+function waveDead(newest) {            // the score never arrives: stop the bars
+  const blk = newest ? composeQ.pop() : composeQ.shift();
+  if (blk) killWave(blk);
+}
+
+function addTheme(data) {
+  const log = $('log');
+  const stick = log.scrollTop + log.clientHeight >= log.scrollHeight - 40;
+  const w = document.createElement('div');
+  w.className = 'tune';
+  const b = document.createElement('button');
+  b.dataset.g = '▶';
+  b.textContent = '▶';
+  b.onclick = () => playWav(data.dir, b);
+  const tx = document.createElement('div');
+  tx.innerHTML = `<div class="tt"><span class="nb">♪</span> ` +
+                 `${esc(data.title || '?')} THEME</div>` +
+                 `<div class="tb">${esc(data.tempo || '?')} bpm</div>`;
+  w.appendChild(b);
+  w.appendChild(tx);
+  const blk = composeQ.shift();        // scores resolve in build (FIFO) order
+  if (blk && blk.isConnected) {
+    killWave(blk);
+    blk.replaceWith(w);
+  } else {
+    log.appendChild(w);
+  }
+  if (stick) log.scrollTop = log.scrollHeight;
+}
+
+function addLines(lines) {
+  if (!lines.length) return;
+  const log = $('log');
+  const stick = log.scrollTop + log.clientHeight >= log.scrollHeight - 40;
+  for (const l of lines) {
+    if (l.startsWith('@roll ')) {
+      try { addDice(JSON.parse(l.slice(6))); } catch (_) {}
+      continue;
+    }
+    if (l.startsWith('@skin ')) {
+      try { addChar(JSON.parse(l.slice(6))); } catch (_) {}
+      continue;
+    }
+    if (l.startsWith('@music ')) {
+      try { addTheme(JSON.parse(l.slice(7))); } catch (_) {}
+      continue;
+    }
+    const d = document.createElement('div');
+    d.className = cls(l);
+    const txt = l.replace(/\n$/, '');
+    if (txt.includes('theme failed') || txt.includes('forge failed')
+        || txt.includes('producer hiccup (build)'))
+      waveDead();                       // oldest block: builds die in FIFO order
+    if (txt.includes('producer hiccup (author)'))
+      waveDead(true);                   // author died mid-game: reap its own
+    if (txt.startsWith('◆')) {          // stage line: its gem can twinkle
+      const g = document.createElement('span');
+      g.className = 'gem';
+      g.textContent = '◆';
+      d.appendChild(g);
+      const tn = document.createTextNode(txt.slice(1));
+      d.appendChild(tn);
+      setGem(g, tn, txt.slice(1), txt.includes('implementing'));
+      if (txt.includes('composing theme')) {
+        const blk = document.createElement('div');
+        blk.className = 'compose';      // line + live waveform, swapped for
+        blk.appendChild(d);             // the theme card when @music lands
+        blk.appendChild(startWave());
+        composeQ.push(blk);
+        log.appendChild(blk);
+        continue;
+      }
+    } else {
+      d.textContent = txt || ' ';
+    }
+    log.appendChild(d);
+  }
+  while (log.childElementCount > 4000) log.firstChild.remove();
+  if (stick) log.scrollTop = log.scrollHeight;
+}
+
+const QUIPS = [
+  // layoffs & corporate
+  "laying off the dev team..",
+  "ousting the main designer..",
+  "creating a toxic work environment..",
+  "restructuring for agility..",
+  "right-sizing the passion..",
+  "sunsetting a beloved franchise..",
+  "merging QA into marketing..",
+  "promoting the intern to lead engineer..",
+  "replacing three seniors with an intern..",
+  "cutting 1900 jobs to afford the acquisition..",
+  "closing the studio that just shipped the hit..",
+  "rewarding the surprise hit with a studio closure..",
+  "asking for more games like the one we cancelled..",
+  "scheduling layoffs for the morning after the awards..",
+  "announcing record profits and layoffs in one email..",
+  "thanking the team for their journey via LinkedIn..",
+  "finding out via badge deactivation..",
+  "restructuring the restructuring department..",
+  "hiring a consultancy to decide who to fire..",
+  "outsourcing the outsourcing..",
+  "converting the staff to volunteers..",
+  "closing the studio after thirty loyal years..",
+  "acquiring a 130th studio for the synergy..",
+  "un-acquiring everything, per the memo..",
+  "selling the beloved IP to fund a licensed flop..",
+  "waiting on a sovereign cheque that never clears..",
+  "pivoting the team to 'supporting other projects'..",
+  "moving everyone to live ops..",
+  "cancelling the project, keeping the meetings..",
+  "resigning en masse, effective immediately..",
+  "shutting the games magazine after 33 years..",
+  "declaring E3 dead, again, officially..",
+  "clearing the office by Friday, no severance..",
+  "paying a streamer millions, closing anyway..",
+  "taking 'full responsibility' (and a bonus)..",
+  "deactivating the founders' badges first..",
+  // the ousted-auteur wing
+  "ousting the lead writer from his own world..",
+  "locking the writers out of the building..",
+  "acquiring the IP via minority shareholders..",
+  "cancelling the acclaimed sequel..",
+  "dissolving the studio's soul at a board meeting..",
+  "failing the willpower check [Impossible: 6%]..",
+  "obeying the lizard brain: 'ship it now'..",
+  "watching the void consume the design document..",
+  "rolling snake eyes on the style check..",
+  "keeping the royalties pending litigation..",
+  "humming 'one day I will return to you'..",
+  "staying hardcore while the payroll bounces..",
+  "becoming a disgrace to the revolution..",
+  "asking a saint for a publishing deal..",
+  "discovering communism in the shareholder meeting..",
+  "hearing the build is haunted (it is)..",
+  "demanding a day-one patch, sternly..",
+  "shivering: somewhere, another studio dies..",
+  "asking what kind of detective cancels a sequel..",
+  "disapproving of the monetization plan, quietly..",
+  "missing the deadline that was yesterday..",
+  "claiming another studio for the doomed commercial area..",
+  // engines & tech
+  "hiring engineers to use visual programming..",
+  "wiring blueprints all the way down..",
+  "admitting the trailer engine was the game..",
+  "shipping the vertical slice..",
+  "adding another else-if to the simulator..",
+  "porting engines because the lead quit..",
+  "waiting forty minutes for shaders..",
+  "upgrading the engine mid-production..",
+  "maintaining the in-house engine: two devs, ten years..",
+  "building the release on someone's laptop..",
+  "keeping source control on a USB stick..",
+  "merging main on a Friday..",
+  "compiling shaders, again, forever..",
+  "arguing with the physics engine about physics..",
+  "rewriting the renderer three weeks from ship..",
+  "praying the netcode holds..",
+  // monetization
+  "adding surprise mechanics..",
+  "renaming loot boxes to surprise mechanics..",
+  "asking if you guys don't have phones..",
+  "selling horse armor since 2006..",
+  "adding a season pass to the season pass..",
+  "monetizing your sense of pride and accomplishment..",
+  "farming the most downvoted comment in history..",
+  "intensifying recurrent user spending..",
+  "optimizing whales per capita..",
+  "designing the pity timer..",
+  "nerfing drop rates before the event..",
+  "pricing the ultimate deluxe gold edition..",
+  "rendering the 17-edition preorder chart..",
+  "locking Tuesday's content behind Wednesday's pass..",
+  "funding another yacht with card packs..",
+  "paying for the prestige project with gacha..",
+  "explaining loot boxes to a parliament..",
+  "getting the business model banned in Belgium..",
+  "calling it ethical because it's cosmetic..",
+  "installing a real-money auction house..",
+  "serving error screens to paying customers..",
+  "charging for fast travel..",
+  "locking content on the disc, day one..",
+  "adding microtransactions to the full-price game..",
+  "charging $70 base, $30 to skip the grind..",
+  "getting comfortable not owning your games..",
+  "budgeting AAAA for the boat game..",
+  "spending eleven years on the boat game..",
+  "outnumbering designers with monetization staff..",
+  "rewarding compliance with daily login gems..",
+  // crunch & production
+  "entering month six of 'two weeks of crunch'..",
+  "volunteering for mandatory 100-hour weeks..",
+  "promising no crunch, scheduling crunch..",
+  "ordering office pizza (nobody goes home)..",
+  "unrolling sleeping bags under the desks..",
+  "rewarding crunch with more crunch..",
+  "moving the deadline left again..",
+  "growing the scope, shrinking the timeline..",
+  "cutting the third act, shipping the tutorial..",
+  "treating the milestone as a suggestion..",
+  "burning down the burndown chart..",
+  "entering hour two of the standup..",
+  "sprinting agile, one quarter at a time..",
+  "inventing story points, enforcing deadlines..",
+  "renaming the rewrite to 'polish phase'..",
+  "failing certification for the ninth time..",
+  "uploading the 60GB day-one patch..",
+  "going gold master, silver quality..",
+  "fixing it in the day-one patch..",
+  "fixing it post-launch..",
+  "fixing it in the sequel..",
+  "publishing a roadmap to the roadmap..",
+  "waiting for the studio magic to kick in..",
+  "pre-producing for six years, producing for one..",
+  "maintaining the design doc as a chat thread..",
+  "updating the GDD (last touched 2019)..",
+  // launch disasters
+  "launching on last-gen toasters..",
+  "calling it surprisingly good on last-gen..",
+  "getting delisted from the storefront..",
+  "refunding the entire launch..",
+  "burning $200M in two weeks live..",
+  "closing the servers before the reviews land..",
+  "shutting the studio four days after launch..",
+  "launching in early access, dying there too..",
+  "speedrunning early access into a closure..",
+  "shipping the city builder at 12 fps..",
+  "simulating every citizen's teeth, none of the traffic..",
+  "promising procedural everything..",
+  "entering the post-launch silence era..",
+  "insisting it just works..",
+  "promising 16x the detail, shipping 2x the bugs..",
+  "shipping the canvas bag in nylon..",
+  "apologizing with in-game currency..",
+  "remastering the classic, refunding the classic..",
+  "telling fans they think they want it (they don't)..",
+  "cancelling the co-op mode that sold the sequel..",
+  "cancelling the 2.0 rework mid-flight..",
+  "shipping at 30fps, closing at zero..",
+  "killing the studio bonus with a live-service flop..",
+  "delaying the game after the meme..",
+  "negotiating royalties with the meme mascot..",
+  "discontinuing the future of gaming..",
+  "promising negative latency..",
+  "refunding every purchase the platform ever sold..",
+  "taking console preorders indefinitely..",
+  "demoing a rival console in a new shell..",
+  "burying the unsold cartridges in the desert..",
+  "causing the crash of 1983..",
+  "cancelling the biggest budget in studio history..",
+  "recalling the sequel within a week..",
+  "bricking flagship GPUs at the menu screen..",
+  "launching without a campaign, promising one later..",
+  "losing connection to the always-online city..",
+  "computing it in the cloud, honest..",
+  // publishers, execs & PR
+  "calling the devs idiots, resigning eventually..",
+  "charging per install, walking it back..",
+  "invoicing developers per download..",
+  "merging with an adware company for synergy..",
+  "repricing the engine to 'whatever we feel like'..",
+  "offering the offline audience last-gen hardware..",
+  "staying always-online, even offline..",
+  "presenting TV, TV, TV, sports, and TV..",
+  "announcing a TV box with games on the side..",
+  "telling the console to go home..",
+  "charging five hundred and ninety-nine US dollars..",
+  "unveiling a giant enemy crab..",
+  "attacking its weak point for massive damage..",
+  "screaming a racing game's name at the reveal..",
+  "insisting the successor is a whole new console..",
+  "failing to explain the console's name..",
+  "printing money until the red 3D flop..",
+  "dispatching lawyers to your emulator..",
+  "cease-and-desisting a fan project..",
+  "patenting the concept of throwing a ball..",
+  "fixing it with the metaverse..",
+  "pivoting to the metaverse..",
+  "promising the avatars legs soon..",
+  "demoing legs that were mocap all along..",
+  "announcing an NFT drop nobody asked for..",
+  "minting collectibles for an audience of none..",
+  "selling the western studios to bet on blockchain..",
+  "trading a legendary studio for magic beans..",
+  "playing web3 to lose..",
+  "watching the crypto bridge walk off with $600M..",
+  "launching a wallet, closing a wallet..",
+  "shadow-dropping the remaster during the drama..",
+  "issuing the non-apology in Comic Sans..",
+  "hearing you (we don't)..",
+  // the pachinko wing
+  "firing the director mid-credits..",
+  "removing his name from the box art..",
+  "pivoting to pachinko..",
+  "turning the horror classic into a slot machine..",
+  "deleting the legendary demo from your console..",
+  "shipping the survival spinoff nobody survived..",
+  "charging $10 for a second save slot..",
+  "banning the director from the award show..",
+  "declaring the fun officially over..",
+  // vaporware & delays
+  "leaving part three unconfirmed..",
+  "remaining unable to count to three..",
+  "entering year eighteen of episode three..",
+  "pre-producing the sequel since 2008..",
+  "crowdfunding $700M and counting..",
+  "selling another JPEG spaceship..",
+  "patching alpha 3.24 of a 2012 kickstarter..",
+  "taking fifteen years to disappoint..",
+  "delaying the comeback by a console generation..",
+  "shipping the long-awaited sequel, ruining the joke economy..",
+  "delaying the open-world juggernaut to next fiscal year..",
+  "slipping the date again, panicking economists..",
+  "announcing the announcement..",
+  "teasing the trailer for the reveal..",
+  "releasing it 'when it's ready'..",
+  "shipping only nine years late..",
+  "loading the skateboarding reboot, still..",
+  "keeping the port 'in development'..",
+  // QA & honesty in trailers
+  "wontfixing what QA found..",
+  "closing the bug: works on my machine..",
+  "marking it won't-fix, shipping it..",
+  "declaring the bug a feature in patch notes..",
+  "trusting speedrunners to find it within the hour..",
+  "shipping the debug menu..",
+  "leaving the dev console enabled..",
+  "pre-rendering the 'gameplay' demo..",
+  "labeling it actual gameplay (it wasn't)..",
+  "downgrading the graphics after the trailer..",
+  "selling the trade-show lighting separately..",
+  "spending the whole budget on horse anatomy..",
+  "testing exclusively on the CEO's laptop..",
+  "certifying that water is wet [FAILED]..",
+  "outsourcing QA to the preorder customers..",
+  // indie & kickstarter
+  "calling it better than nothing..",
+  "making backers cry like an anime fan on prom night..",
+  "shipping physical rewards 'soon' since 2016..",
+  "stretching goals, stretching the truth..",
+  "promising an acorn becomes a forest..",
+  "promising acorns, shipping gravel..",
+  "winning the mystery cube, receiving vibes..",
+  "cashing the exclusivity cheque; backers rioting..",
+  "dreaming the demo into a product..",
+  "paying rent in wishlists..",
+  "counting revenue: 40 wishlists and a capsule image..",
+  "launching opposite the juggernaut on purpose..",
+  "surrendering 70% and the IP..",
+  "signing away the IP for a convention booth..",
+  "scoring the soundtrack yourself (solo dev)..",
+  // corporate rituals
+  "aligning stakeholders..",
+  "synergizing the pillars..",
+  "leveraging core competencies..",
+  "circling back on the fun..",
+  "workshopping the fun pillar..",
+  "focus-testing the soul out of it..",
+  "painting it beige for the focus group..",
+  "adding a crafting system nobody wanted..",
+  "opening the world for no reason..",
+  "adding towers to climb..",
+  "sprinkling 600 question marks on the map..",
+  "sanding off the personality..",
+  "chasing the battle-royale audience..",
+  "adding a battle royale mode in post..",
+  "making it live-service, killing it live..",
+  "delivering games as a disservice..",
+  "demanding daily logins for engagement..",
+  "building FOMO into the core loop..",
+  "watching the retention curve point to hell..",
+  "extinguishing the KPI dashboard fire..",
+  "A/B testing the tutorial's dignity..",
+  "consulting the monetization astrologer..",
+  "asking marketing what genre we are..",
+  "rebranding the delay as polish..",
+  "shipping the trailer first, the game later..",
+  "announcing merch before mechanics..",
+  "mood-boarding the roadmap..",
+  "shipping vibes, patching gameplay..",
+];
+
+let activeGem = null, activeTxt = null, activeOrig = '', quipOK = false,
+    lastQuip = 0;
+const GEMS = ['◆', '✦', '◇', '★'];
+let gemTick = 0;
+function setGem(g, tn, orig, quippy) {   // newest stage line owns the sparkle
+  if (activeGem) {
+    activeGem.classList.remove('live');
+    activeGem.textContent = '◆';
+    if (activeTxt) activeTxt.textContent = activeOrig;   // restore true label
+  }
+  activeGem = g; activeTxt = tn; activeOrig = orig;
+  quipOK = !!quippy; lastQuip = Date.now();
+  if (busyNow) g.classList.add('live');
+}
+setInterval(() => {
+  if (!activeGem || !activeGem.classList.contains('live')) return;
+  gemTick = (gemTick + 1) % GEMS.length;
+  activeGem.textContent = GEMS[gemTick];
+}, 180);
+
+let deck = [];
+function quip() {                        // shuffled deck — no repeats until spent
+  if (!deck.length) {
+    deck = QUIPS.slice();
+    for (let i = deck.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
+  }
+  return deck.pop();
+}
+setInterval(() => {                      // implementing: quip every 10 s
+  if (!quipOK || !activeTxt || !activeGem ||
+      !activeGem.classList.contains('live')) return;
+  if (Date.now() - lastQuip < 10000) return;
+  lastQuip = Date.now();
+  activeTxt.textContent = ' ' + quip();
+}, 1000);
+
+function renderLib(lib) {
+  if (!DEV) return;
+  const j = JSON.stringify(lib);
+  if (j === lastLib) return;
+  lastLib = j;
+  $('libcount').textContent = '(' + lib.length + ')';
+  const box = $('lib');
+  box.innerHTML = '';
+  [...lib].reverse().forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'cardg' + (sel === c.dir ? ' sel' : '');
+    d.innerHTML =
+      `<div class="ridg"></div>` +
+      `<div class="clabel"><div class="cstripe"></div>` +
+      `<div class="ct">${esc(c.title)}</div></div>` +
+      `<div class="cm">` +
+      (c.wav ? `<button class="wavbtn" data-g="♪">♪</button>` : '') +
+      `${esc(c.dir.slice(0, 3))} · ${esc(c.genre)} · ${esc(c.setting)}` +
+      (c.theme ? `<br><span class="chip">${esc(c.theme)}</span>` : '') + `</div>`;
+    const wb = d.querySelector('.wavbtn');
+    if (wb) {
+      wb.onclick = e => { e.stopPropagation(); playWav(c.dir, wb); };
+      wb.ondblclick = e => e.stopPropagation();   // never bubble into flash
+    }
+    d.onclick = () => {
+      sel = c.dir;
+      box.querySelectorAll('.sel').forEach(e => e.classList.remove('sel'));
+      d.classList.add('sel');
+      $('b-flash').disabled = busyNow;
+    };
+    d.ondblclick = () => flash(c.dir);
+    box.appendChild(d);
+  });
+}
+
+function setBusy(b, label) {
+  busyNow = b;
+  ['b-forge', 'b-loop', 'b-pregen'].forEach(id => $(id).disabled = b);
+  $('b-flash').disabled = b || !sel;
+  $('b-stop').disabled = !b;
+  const st = $('status');
+  st.textContent = b ? label : 'READY';
+  st.className = b ? 'on' : '';
+  document.title = (b ? '⚒ ' : '') + 'INFINITE CARTRIDGE';
+  if (activeGem) {
+    activeGem.classList.toggle('live', b);
+    if (!b) {
+      activeGem.textContent = '◆';
+      if (activeTxt) activeTxt.textContent = activeOrig;
+    }
+  }
+  if (!b) while (composeQ.length) waveDead();   // run over: no score is coming
+}
+
+async function poll() {
+  try {
+    const r = await fetch('/api/state?since=' + cursor);
+    const s = await r.json();
+    if (s.total < cursor) { $('log').innerHTML = ''; cursor = 0; }   // server restarted
+    else {
+      cursor = s.total;
+      addLines(s.lines);
+      renderLib(s.library);
+      setBusy(s.busy, s.label);
+      $('meta').textContent = s.port + ' · ' + s.model;
+    }
+  } catch (e) {
+    const st = $('status');
+    st.textContent = 'SERVER GONE';
+    st.className = 'err';
+  }
+  setTimeout(poll, 600);
+}
+
+async function run(body) {
+  const r = await fetch('/api/run', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) {
+    const e = await r.json().catch(() => ({}));
+    addLines(['✗ ' + (e.err || r.status) + '\n']);
+  }
+}
+
+function flash(d) { run({cmd: 'flash', dir: d}); }
+const theme = () => $('theme').value.trim();
+$('b-forge').onclick = () => run({cmd: 'forge', theme: theme()});
+$('b-loop').onclick = () => run({cmd: 'loop', theme: theme()});
+$('b-pregen').onclick = () => run({cmd: 'pregen', n: +$('n').value || 3, theme: theme()});
+$('b-flash').onclick = () => sel && flash(sel);
+$('b-stop').onclick = () => fetch('/api/stop', {method: 'POST'});
+$('theme').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !busyNow) run({cmd: 'forge', theme: theme()});
+});
+let watching = false, scrTimer = null;
+const scrCtx = $('scr').getContext('2d');
+const scrImg = scrCtx.createImageData(160, 80);
+async function grabFrame() {
+  if (!watching || document.hidden) return;    // hidden tab: pumps go idle too
+  try {
+    const r = await fetch('/api/screen');
+    if (r.status === 200) {
+      const b = new Uint8Array(await r.arrayBuffer());
+      if (b.length !== 25600) return;
+      const d = scrImg.data;
+      for (let i = 0, p = 0; i < 25600; i += 2, p += 4) {
+        const v = b[i] | (b[i + 1] << 8);      // little-endian RGB565
+        d[p] = (v >> 8) & 0xF8;
+        d[p + 1] = (v >> 3) & 0xFC;
+        d[p + 2] = (v << 3) & 0xF8;
+        d[p + 3] = 255;
+      }
+      scrCtx.putImageData(scrImg, 0, 0);
+      $('nosig').style.display = 'none';
+    } else {
+      $('nosig').textContent = 'NO SIGNAL';
+      $('nosig').style.display = 'flex';
+    }
+  } catch (_) {}
+}
+$('bezel').onclick = () => {
+  watching = !watching;
+  $('scrhint').textContent = watching ? '— live' : '— click to watch';
+  $('nosig').textContent = watching ? 'NO SIGNAL' : 'SCREEN OFF';
+  $('nosig').style.display = 'flex';
+  if (watching && !scrTimer) scrTimer = setInterval(grabFrame, 600);
+  if (!watching && scrTimer) {
+    clearInterval(scrTimer);
+    scrTimer = null;
+    scrCtx.clearRect(0, 0, 160, 80);
+  }
+};
+
+if (DEV) {                                     // preview roll + character card
+  $('b-tetris').style.display = '';
+  $('b-tetris').onclick = () =>                // Korobeiniki on the real AY chips;
+    fetch('/api/tetris', {method: 'POST'})     // pressing again stops it
+      .then(r => r.json())
+      .then(j => $('b-tetris').textContent = j.playing ? '■ TETRIS' : 'TETRIS')
+      .catch(() => {});
+  $('b-dice').style.display = '';
+  $('b-dice').onclick = () => {
+    addDice({genre: 'racer', verb: 'CATCH', goal: 9, twist: 'double',
+             setting: 'sky', avatar: 'SPR_MONK',
+             wild_kind: Math.random() < .3 ? 'blend' : null});
+    addChar({title: 'ORBIT GUARD', blurb: 'circle the core, bat rocks away',
+             avatar: 'SPR_GOOSERUN'});
+    addLines(['◆ composing theme (in parallel) ...\n']);
+    setTimeout(() => addTheme({dir: '000_preview', title: 'ORBIT GUARD',
+                               tempo: 156}), 6000);
+    addLines(['◆ implementing ...\n']);
+    if (activeGem) {                           // fake 25s: sparkle + two quips
+      const g = activeGem, tn = activeTxt, o = activeOrig;
+      g.classList.add('live');
+      setTimeout(() => {
+        g.classList.remove('live');
+        g.textContent = '◆';
+        if (tn) tn.textContent = o;
+      }, 25000);
+    }
+  };
+}
+poll();
+</script>
+</body>
+</html>
