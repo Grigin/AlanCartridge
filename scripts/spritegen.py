@@ -40,7 +40,10 @@ OVERRIDE = {  # per-source fixups on top of nearest-PICO for auto sources
         0x7789BE: 12, 0x7894BF: 12, 0x8098DF: 12,       # soft blues -> sky
         0x829CE8: 12, 0x93A9EB: 12},
  "CT": {},
- "RC": {0xE86A17: 8, 0xD96417: 4, 0x9F4910: 4},          # "red" livery -> red
+ "RC": {0xE86A17: 8, 0xD96417: 4, 0x9F4910: 4,           # "red" livery -> red
+        0xA6C9CB: 5, 0xBDDADB: 7},                       # track checkers pop
+ "GI": {},
+ "X": {},    # loose packs (assets/<pack>/<file> crops via "XF" entries)
 }
 
 SOURCES = {
@@ -52,6 +55,9 @@ SOURCES = {
  "PPT": ("grid8", A / "Paper-Pixels-8x8/no-shadow/Tiles.png", "PP"),
  "CT":  ("grid16", A / "kenney_roguelike-modern-city/Tilemap/tilemap_packed.png", "CT"),
  "RC":  ("file16", A / "kenney_racing-pack/PNG", "RC"),
+ "GI":  ("file16", A / "kenney_game-icons-expansion/PNG/Colored", "GI"),
+ # "CTC" entries compose a col,row,w,h tile REGION of the CT sheet into one
+ # 16x16 sprite (multi-tile cars etc): ("CTC", col, row, w, h, NAME, desc)
 }
 ROTATE = ("Cars/", "Motorcycles/")   # racing subdirs whose sprites face right
 
@@ -65,14 +71,41 @@ CATALOG = {
   ("MR", 12, 0, "IMP", "red imp"), ("MR", 13, 0, "CYCLOPS", "one-eyed brute"),
   ("MR", 14, 0, "WIZARD", "hatted wizard"),
   ("PPP", 0, 2, "GUNNER", "runner with pistol"), ("PPP", 2, 2, "GUNNER2", "gunner frame 2"),
-  ("PPP", 0, 21, "COMMANDO", "runner with rifle"), ("PPP", 2, 21, "COMMANDO2", "commando frame 2")],
+  ("PPP", 0, 21, "COMMANDO", "runner with rifle"), ("PPP", 2, 21, "COMMANDO2", "commando frame 2"),
+  ("XF", "City/CharAndVechicles.png", 18, 15, 12, 16, "TOWNSFOLK", "white stencil walker"),
+  ("XF", "City/CharAndVechicles.png", 50, 15, 11, 16, "TOPHAT", "white stencil gent"),
+  ("XF", "City/CharAndVechicles.png", 82, 15, 11, 16, "LADY", "white stencil lady"),
+  ("XF", "City/CharAndVechicles.png", 81, 32, 14, 14, "DETECTIVE", "white stencil hat mug"),
+  ("XF", "mafia guys/mafia guy 1.png", 24, 15, 14, 33, "MOBSTER", "navy-suit mobster"),
+  ("XF", "mafia guys/mafia guy 1.png", 148, 79, 20, 33, "MOBSTER2", "mobster stride"),
+  ("XF", "mafia guys/mafia guy 1.png", 24, 143, 17, 33, "MOBSTER_HIT", "mobster punching"),
+  ("XF", "mafia guys/mafia guy 2.png", 24, 16, 14, 32, "WHITESUIT", "white-suit heavy"),
+  ("XF", "mafia guys/mafia guy 2.png", 148, 80, 20, 32, "WHITESUIT2", "heavy stride"),
+  ("XF", "mafia guys/mafia guy 2.png", 24, 144, 17, 32, "WHITESUIT_HIT", "heavy punching"),
+  ("XF", "mafia guys/mafia guy 3.png", 24, 16, 14, 32, "CAPO", "sweater capo"),
+  ("XF", "mafia guys/mafia guy 3.png", 148, 80, 20, 32, "CAPO2", "capo stride"),
+  ("XF", "mafia guys/mafia guy 3.png", 24, 144, 17, 32, "CAPO_HIT", "capo punching"),
+  ("XF", "mafia guys/mafia guy 1.png", 23, 206, 19, 34, "MOBSTER_SWING", "mobster arms-wide swing"),
+  ("XF", "mafia guys/mafia guy 2.png", 216, 207, 17, 33, "WHITESUIT_KICK", "heavy knee kick"),
+  ("XF", "mafia guys/mafia guy 2.png", 536, 207, 17, 33, "WHITESUIT_BLOCK", "heavy X-guard block"),
+  ("XF", "mafia guys/mafia guy 2.png", 23, 271, 19, 33, "WHITESUIT_POINT", "heavy pointing ahead"),
+  ("XF", "mafia guys/mafia guy 3.png", 23, 207, 19, 33, "CAPO_SWING", "capo haymaker swing"),
+  ("XF", "City/CharAndVechicles.png", 35, 15, 11, 16, "SCHOOLKID", "white stencil kid"),
+  ("XF", "City/CharAndVechicles.png", 67, 15, 9, 16, "PASSERBY", "white stencil slim walker"),
+  ("XF", "City/CharAndVechicles.png", 65, 32, 14, 14, "FLATCAP", "white stencil cap mug")],
  "beasts": [
   ("MR", 4, 1, "SNAKE", "coiled snake"), ("MR", 5, 1, "FOX", "fox"),
   ("MR", 6, 1, "BUNNY", "white bunny"), ("MR", 7, 1, "SPIDER", "spider"),
   ("MR", 9, 1, "BAT", "winged bat/moth"), ("MR", 10, 1, "TURTLE", "green turtle"),
   ("MR", 11, 1, "CRAB", "crab"),
   ("PPE", 5, 13, "CHICK", "white chicken"), ("PPE", 6, 13, "CHICK2", "chicken frame 2"),
-  ("PPE", 4, 15, "TOAD", "brown toad"), ("PPE", 4, 20, "PENGUIN", "grey penguin")],
+  ("PPE", 4, 15, "TOAD", "brown toad"), ("PPE", 4, 20, "PENGUIN", "grey penguin"),
+  ("XF", "Goose/Idle.png", 23, 4, 23, 28, "GOOSE", "white goose"),
+  ("XF", "Goose/Walk.png", 85, 4, 23, 28, "GOOSE2", "goose waddle"),
+  ("XF", "Goose/Run.png", 20, 12, 34, 20, "GOOSERUN", "goose sprinting"),
+  ("XF", "Goose/Run.png", 148, 12, 34, 20, "GOOSERUN2", "sprint frame 2"),
+  ("XF", "Goose/Flap.png", 19, 4, 28, 28, "GOOSEFLAP", "goose wings out"),
+  ("XF", "Goose/Flap.png", 148, 4, 30, 28, "GOOSEFLAP2", "flap frame 2")],
  "monsters": [
   ("MR", 8, 1, "SLIME", "gooey blob"), ("MR", 12, 1, "GOBLIN", "capped goblin"),
   ("MR", 14, 1, "GHOST", "ghost"),
@@ -110,7 +143,44 @@ CATALOG = {
   ("RC", "Objects/rock2.png", "ROCK2", "pale rock"),
   ("RC", "Objects/tires_red.png", "TIRES_RED", "red tire ring"),
   ("RC", "Objects/tires_white.png", "TIRES_WHT", "white tire ring"),
-  ("RC", "Objects/tree_large.png", "PARKTREE", "round road tree")],
+  ("RC", "Objects/tree_large.png", "PARKTREE", "round road tree"),
+  ("RC", "Motorcycles/motorcycle_yellow.png", "MOTO_YELLOW", "yellow motorcycle"),
+  ("RC", "Motorcycles/motorcycle_blue.png", "MOTO_BLUE", "blue motorcycle"),
+  ("RC", "Objects/cone_down.png", "CONE_DOWN", "tipped-over cone"),
+  ("RC", "Objects/arrow_white.png", "CHEVRON_W", "white chevron sign"),
+  ("CTC", 34, 16, 3, 2, "CITYCAR_G", "green sedan side view"),
+  ("CTC", 34, 20, 3, 2, "CITYCAR_S", "silver sedan side view"),
+  ("CTC", 34, 24, 3, 2, "CITYCAR_O", "orange sedan side view"),
+  ("CTC", 31, 18, 2, 2, "CARFRONT_G", "green car head-on"),
+  ("CTC", 31, 22, 2, 2, "CARFRONT_S", "silver car head-on"),
+  ("CTC", 31, 26, 2, 2, "CARFRONT_O", "orange car head-on"),
+  ("CTC", 33, 18, 2, 2, "CARBACK_G", "green car from behind"),
+  ("CTC", 33, 22, 2, 2, "CARBACK_S", "silver car from behind"),
+  ("CTC", 33, 26, 2, 2, "CARBACK_O", "orange car from behind"),
+  ("XF", "City/CharAndVechicles.png", 161, 15, 14, 16, "WHITECAR", "white stencil car front"),
+  ("XF", "City/CharAndVechicles.png", 112, 47, 31, 16, "BOXTRUCK", "white stencil truck side"),
+  ("XF", "City/CharAndVechicles.png", 240, 47, 39, 16, "TRAILER", "white stencil trailer"),
+  ("XF", "City/CharAndVechicles.png", 112, 64, 23, 31, "CITYBUS", "white stencil bus top-down"),
+  ("XF", "City/CharAndVechicles.png", 215, 64, 31, 31, "TRUCKTOP", "white stencil truck top-down"),
+  ("XF", "Foozle_2DT0013_Scallywag_Ships/Ships tiles.png", 1, 192, 30, 64, "IRONSHIP", "grey ironclad ship"),
+  ("XF", "Foozle_2DT0013_Scallywag_Ships/Ships tiles.png", 33, 192, 30, 64, "IRONSHIP2", "ironclad variant"),
+  ("XF", "Foozle_2DT0013_Scallywag_Ships/Ships tiles.png", 401, 257, 46, 119, "GALLEON", "wooden galleon"),
+  ("XF", "Foozle_2DT0013_Scallywag_Ships/Ships tiles.png", 449, 257, 46, 119, "GALLEON2", "galleon variant"),
+  ("CTC", 31, 16, 3, 2, "CITYCAR_G2", "green sedan quarter view"),
+  ("CTC", 31, 20, 3, 2, "CITYCAR_S2", "silver sedan quarter view"),
+  ("CTC", 31, 24, 3, 2, "CITYCAR_O2", "orange sedan quarter view"),
+  ("XF", "City/CharAndVechicles.png", 112, 15, 32, 16, "TRAFFIC", "white stencil car pair"),
+  ("XF", "City/CharAndVechicles.png", 224, 15, 32, 16, "TRAFFIC2", "stencil car pair variant"),
+  ("XF", "City/CharAndVechicles.png", 177, 15, 14, 16, "WHITECAR_B", "white stencil car rear"),
+  ("XF", "City/CharAndVechicles.png", 193, 15, 14, 16, "WHITEVAN", "white stencil van front"),
+  ("XF", "City/CharAndVechicles.png", 209, 15, 14, 16, "WHITEVAN_B", "white stencil van rear"),
+  ("XF", "City/CharAndVechicles.png", 154, 47, 28, 16, "DUMPTRUCK", "white stencil dump truck"),
+  ("XF", "City/CharAndVechicles.png", 192, 47, 32, 16, "FLATBED", "white stencil flatbed lorry"),
+  ("XF", "City/CharAndVechicles.png", 137, 64, 23, 31, "VANTOP", "stencil van top-down"),
+  ("XF", "City/CharAndVechicles.png", 161, 64, 14, 31, "CARTOP", "stencil car top-down"),
+  ("XF", "City/CharAndVechicles.png", 248, 64, 31, 31, "RIGTOP", "stencil semi top-down"),
+  ("XF", "City/CharAndVechicles.png", 280, 64, 14, 31, "LIMOTOP", "stencil limo top-down"),
+  ("XF", "City/CharAndVechicles.png", 296, 64, 14, 31, "LADDERTOP", "stencil ladder-truck top-down")],
  "weapons": [
   ("MR", 6, 4, "SWORD", "sword"), ("MR", 7, 4, "PICKAXE", "pickaxe"),
   ("MR", 8, 4, "BOW", "bow and arrow"), ("MR", 9, 4, "SPEAR", "gold spear"),
@@ -127,7 +197,9 @@ CATALOG = {
   ("MR", 4, 3, "BOOTS", "boots"),
   ("P8", 13, 5, "GEM", "gem"), ("P8", 12, 9, "STAR", "star"),
   ("P8", 14, 5, "MAGNET", "red magnet"),
-  ("PPC", 1, 0, "COIN", "gold coin"), ("PPC", 2, 0, "BLUEGEM", "blue gem")],
+  ("PPC", 1, 0, "COIN", "gold coin"), ("PPC", 2, 0, "BLUEGEM", "blue gem"),
+  ("CT", 4, 18, "CANISTER", "green canister"),
+  ("CT", 6, 18, "BOTTLE", "green bottle")],
  "nature": [
   ("MR", 5, 4, "SPROUT", "grass sprouts"), ("MR", 4, 5, "TREE", "round tree"),
   ("MR", 5, 5, "PINE", "pine tree"), ("MR", 6, 5, "BUSH", "bushes"),
@@ -145,7 +217,23 @@ CATALOG = {
   ("CT", 20, 26, "DOOR_BROWN", "brown city door"), ("CT", 23, 26, "DOOR_GREEN", "green city door"),
   ("CT", 26, 26, "DOOR_ORANGE", "orange city door"),
   ("CT", 32, 4, "BILLBOARD", "green billboard"), ("CT", 35, 5, "BILLBOARD_T", "teal billboard"),
-  ("CT", 33, 7, "BILLBOARD_O", "orange billboard"), ("CT", 36, 7, "NEON", "teal neon sign")],
+  ("CT", 33, 7, "BILLBOARD_O", "orange billboard"), ("CT", 36, 7, "NEON", "teal neon sign"),
+  ("XF", "japanese_school/japanese-school_8x8-final.tileset.png", 56, 312, 8, 8, "LATTICE", "pale lattice ring"),
+  ("XF", "japanese_school/japanese-school_8x8-final.tileset.png", 80, 312, 8, 8, "LATTICE_H", "lattice bar horizontal"),
+  ("XF", "japanese_school/japanese-school_8x8-final.tileset.png", 88, 312, 8, 8, "LATTICE_V", "lattice bar vertical"),
+  ("XF", "japanese_school/japanese-school_8x8-final.tileset.png", 48, 312, 8, 8, "LATTICE_X", "lattice cross"),
+  ("XF", "japanese_school/japanese-school_8x8-final.tileset.png", 32, 320, 8, 8, "LATTICE_TE", "lattice tee, branch right"),
+  ("XF", "japanese_school/japanese-school_8x8-final.tileset.png", 48, 320, 8, 8, "LATTICE_TW", "lattice tee, branch left"),
+  ("XF", "japanese_school/japanese-school_8x8-final.tileset.png", 40, 320, 8, 8, "LATTICE_TS", "lattice tee, branch down"),
+  ("XF", "japanese_school/japanese-school_8x8-final.tileset.png", 56, 320, 8, 8, "LATTICE_TN", "lattice tee, branch up"),
+  ("XF", "japanese_school/japanese-school_8x8-final.tileset.png", 64, 312, 8, 8, "LATTICE_L", "sharp lattice bend"),
+  ("XF", "japanese_school/japanese-school_8x8-final.tileset.png", 64, 320, 8, 8, "LATTICE_L2", "sharp bend variant"),
+  ("XF", "japanese_school/japanese-school_8x8-final.tileset.png", 72, 320, 8, 8, "LATTICE_L3", "sharp bend variant"),
+  ("XF", "japanese_school/japanese-school_8x8-final.tileset.png", 80, 320, 8, 8, "LATTICE_L4", "sharp bend variant"),
+  ("XF", "japanese_school/japanese-school_8x8-final.tileset.png", 72, 312, 8, 8, "LATTICE_R", "round bend, down-right"),
+  ("XF", "japanese_school/japanese-school_8x8-final.tileset.png", 88, 320, 8, 8, "LATTICE_R2", "round bend, down-left"),
+  ("XF", "japanese_school/japanese-school_8x8-final.tileset.png", 96, 320, 8, 8, "LATTICE_R3", "round bend, up-left"),
+  ("XF", "japanese_school/japanese-school_8x8-final.tileset.png", 104, 320, 8, 8, "LATTICE_R4", "round bend, up-right")],
  "urban": [
   ("CT", 15, 14, "HYDRANT", "orange hydrant"), ("CT", 2, 16, "STREETLAMP", "street lamp"),
   ("CT", 12, 16, "MAILBOX", "teal mailbox"), ("CT", 17, 15, "BENCH", "wooden bench"),
@@ -159,7 +247,18 @@ CATALOG = {
   ("CT", 10, 18, "FRUITSTAND", "fruit stand"), ("CT", 11, 18, "VEGSTAND", "veggie stand"),
   ("CT", 0, 16, "LOCKER", "green locker"), ("CT", 30, 3, "OILDRUM", "steel drum"),
   ("CT", 31, 3, "KEG", "pale keg"), ("CT", 29, 6, "DECKCHAIR", "pool chair"),
-  ("CT", 28, 5, "POOL", "pool water"), ("CT", 19, 24, "ROADARROW", "painted road arrow")],
+  ("CT", 28, 5, "POOL", "pool water"), ("CT", 19, 24, "ROADARROW", "painted road arrow"),
+  ("CT", 2, 14, "TRAFFICLIGHT", "traffic light"),
+  ("CT", 32, 14, "GENERATOR", "utility cart with beacon"),
+  ("CT", 11, 16, "STREETPOLE", "slim street pole"),
+  ("CT", 14, 18, "CONESTACK", "stacked cones"),
+  ("CT", 24, 6, "BARRICADE2", "barrier with beacons"),
+  ("CT", 27, 10, "CANOPY_O", "orange striped canopy"),
+  ("CT", 29, 25, "GARAGEDOOR", "garage door"),
+  ("CT", 20, 22, "CRACKED", "cracked window"),
+  ("CT", 21, 22, "SHATTERED", "shattered window"),
+  ("CT", 28, 10, "CANOPY_O2", "orange canopy scalloped edge"),
+  ("CT", 30, 25, "STEELPANEL", "dark steel door panel")],
  "furniture": [
   ("MR", 8, 2, "POT", "pot"), ("MR", 9, 2, "URN", "dark urn"),
   ("MR", 9, 3, "CRATE", "crate"), ("MR", 10, 2, "STATUE", "grey statue"),
@@ -180,13 +279,78 @@ CATALOG = {
   ("CT", 12, 21, "LANELINE", "yellow lane line"), ("CT", 13, 22, "CROSSWALK", "zebra crossing"),
   ("CT", 9, 24, "MANHOLE", "manhole cover"), ("CT", 15, 19, "GRATE", "hatched steel plate"),
   ("CT", 1, 26, "GRASS", "grass block"), ("CT", 10, 26, "DIRT", "dirt block"),
-  ("CT", 33, 1, "LAWN", "park lawn")],
+  ("CT", 33, 1, "LAWN", "park lawn"),
+  ("CT", 13, 19, "YLINES_H", "double yellow line horizontal"),
+  ("CT", 14, 19, "YLINE_H", "yellow line horizontal"),
+  ("CT", 12, 20, "YLINE_V", "yellow line vertical"),
+  ("CT", 13, 20, "YLINES_V", "double yellow line vertical"),
+  ("CT", 9, 20, "WDASH_V", "white dashes vertical"),
+  ("CT", 10, 22, "WDASH_H", "white dashes horizontal"),
+  ("CT", 17, 21, "WLINE_V", "white line vertical"),
+  ("CT", 12, 22, "CROSSWALK_V", "zebra crossing vertical"),
+  ("CT", 16, 23, "CURB", "white curb corner"),
+  ("CT", 17, 23, "CURB_V", "white curb vertical"),
+  ("CT", 19, 22, "ARROW_DOWN", "road arrow down"),
+  ("CT", 19, 23, "ARROW_LEFT", "road arrow left"),
+  ("CT", 13, 24, "PARKMARK", "P road glyph"),
+  ("CT", 14, 24, "BIKELANE", "bike road glyph"),
+  ("CT", 11, 24, "XMARK", "X road glyph"),
+  ("CT", 12, 24, "CARMARK", "car road glyph"),
+  ("CTC", 35, 0, 2, 2, "STONELAWN", "lawn with stones"),
+  ("CT", 2, 5, "REDBRICK", "red brick wall"),
+  ("CT", 0, 5, "BRICKPIPE", "brick wall with pipe"),
+  ("RC", "Tiles/Asphalt road/road_asphalt70.png", "FINISH", "checkered finish strip"),
+  ("RC", "Tiles/Asphalt road/road_asphalt69.png", "TRACKEDGE", "track edge left"),
+  ("RC", "Tiles/Asphalt road/road_asphalt71.png", "TRACKEDGE2", "track edge right"),
+  ("XF", "City/road.png", 0, 40, 40, 40, "ROAD_V", "road straight vertical"),
+  ("XF", "City/road.png", 80, 80, 40, 40, "ROAD_H", "road straight horizontal"),
+  ("XF", "City/road.png", 40, 40, 40, 40, "ROAD_X", "road crossroads"),
+  ("XF", "City/road.png", 120, 40, 40, 40, "ROAD_T", "road T junction"),
+  ("XF", "City/road.png", 160, 40, 40, 40, "ROAD_DASH_V", "dashed road vertical"),
+  ("XF", "City/road.png", 200, 40, 40, 40, "ROAD_DASH_H", "dashed road horizontal"),
+  ("XF", "City/road.png", 120, 80, 40, 40, "ROAD_ZEBRA_H", "road zebra horizontal"),
+  ("XF", "City/road.png", 80, 120, 40, 40, "ROAD_ZEBRA_V", "road zebra vertical"),
+  ("XF", "City/road.png", 0, 0, 40, 40, "ROAD_CURVE", "road curve"),
+  ("XF", "City/road.png", 200, 120, 40, 40, "ROAD_CURVE2", "road curve variant"),
+  ("XF", "City/road.png", 240, 80, 40, 40, "ROAD_END", "road dead end"),
+  ("XF", "City/road.png", 40, 80, 40, 40, "ROAD_JOIN", "road junction piece"),
+  ("CT", 1, 5, "REDBRICK2", "mottled red brick"),
+  ("CT", 3, 5, "BRICKPIPE2", "brick wall, pipe at right"),
+  ("CT", 10, 20, "ASPHALT2", "smooth pale asphalt"),
+  ("CT", 15, 23, "ASPHALT3", "riveted asphalt"),
+  ("CT", 17, 24, "ASPHALT4", "riveted asphalt, edge tick"),
+  ("CT", 11, 20, "YLINE_TOP", "yellow line along top edge"),
+  ("CT", 14, 20, "YLINE_TOP2", "yellow top line, joint variant"),
+  ("CT", 11, 21, "YLINE_V2", "yellow line vertical, offset left"),
+  ("CT", 13, 21, "YLINES_V2", "double yellow vertical, offset right"),
+  ("CT", 14, 21, "YLINES_V3", "double yellow vertical at left edge"),
+  ("CT", 18, 21, "WLINE_V2", "white line vertical at left edge"),
+  ("CT", 9, 22, "WBARS_H", "thick white bars horizontal"),
+  ("CT", 17, 22, "WCORNER_SE", "white corner, bottom-right"),
+  ("CT", 18, 22, "WCORNER_SW", "white corner, bottom-left"),
+  ("CT", 15, 24, "WLINE_E", "white line at right edge"),
+  ("CT", 16, 24, "WLINE_W", "white line at left edge"),
+  ("CT", 18, 24, "WLINE_S", "white line along bottom edge"),
+  ("XF", "City/road.png", 40, 0, 40, 40, "ROAD_LANES", "solid + dashed lane lines"),
+  ("XF", "City/road.png", 240, 40, 40, 40, "ROAD_LANES_V", "solid + dashed lines vertical"),
+  ("XF", "City/road.png", 0, 80, 40, 40, "ROAD_LINE_V", "solid road line vertical"),
+  ("XF", "City/road.png", 200, 80, 40, 40, "ROAD_LINE_V2", "broken road line vertical"),
+  ("XF", "City/road.png", 120, 0, 40, 40, "ROAD_BRANCH", "road line, dashed branch down"),
+  ("XF", "City/road.png", 120, 240, 40, 40, "ROAD_BRANCH2", "road line, dashed branch up"),
+  ("XF", "City/road.png", 240, 0, 40, 40, "ROAD_CORNER_NE", "road corner, top-right"),
+  ("XF", "City/road.png", 240, 240, 40, 40, "ROAD_CORNER_SE", "road corner, bottom-right"),
+  ("XF", "City/road.png", 160, 80, 40, 40, "ROAD_CORNER_SW", "road corner, bottom-left"),
+  ("XF", "City/road.png", 80, 40, 40, 40, "ROAD_DASH_BEND", "dashed road corner"),
+  ("XF", "City/road.png", 40, 120, 40, 40, "ROAD_DASHES", "scattered lane dashes"),
+  ("XF", "City/road.png", 160, 120, 40, 40, "ROAD_LADDER", "ladder zebra crossing")],
  "fx": [
   ("MR", 0, 8, "ORB", "magic orb"), ("MR", 1, 8, "PORTAL", "green swirl"),
   ("MR", 3, 8, "BOOM", "explosion burst"), ("MR", 4, 8, "SPARK", "sparkles"),
   ("MR", 5, 8, "BOLT", "bolt streak"), ("MR", 6, 8, "FIREBOLT", "fire streak"),
   ("MR", 8, 8, "FIRE", "campfire"), ("MR", 9, 8, "CANDLE", "candle"),
-  ("MR", 10, 8, "FLAME", "small flame"), ("P8", 8, 5, "ZAP", "blue lightning")],
+  ("MR", 10, 8, "FLAME", "small flame"), ("P8", 8, 5, "ZAP", "blue lightning"),
+  ("GI", "1x/fightJoy_00.png", "SPIN_CW", "clockwise spin arrow"),
+  ("GI", "1x/fightJoy_05.png", "SPIN_CCW", "counter-clockwise spin arrow")],
 }
 
 
@@ -212,21 +376,34 @@ def nib_from_img(img, src, x0, y0, size):
     return out
 
 
-def tile16_from_file(path, src, rotate):
-    im = Image.open(path).convert("RGBA")
-    if rotate:
-        im = im.transpose(Image.ROTATE_270)
+def fit16(im, cmsrc):
     w, h = im.size
     sc = min(16 / w, 16 / h)
     nw, nh = max(1, round(w * sc)), max(1, round(h * sc))
     im = im.resize((nw, nh), Image.NEAREST)   # keep flat colors exact for overrides
     tile = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
     tile.alpha_composite(im, ((16 - nw) // 2, (16 - nh) // 2))
-    return nib_from_img(tile, src, 0, 0, 16)
+    return nib_from_img(tile, cmsrc, 0, 0, 16)
+
+
+def tile16_from_file(path, src, rotate):
+    im = Image.open(path).convert("RGBA")
+    if rotate:
+        im = im.transpose(Image.ROTATE_270)
+    return fit16(im, src)
 
 
 def load_entry(entry, sheets):
     src = entry[0]
+    if src == "CTC":                          # composed multi-tile CT region
+        col, row, w, h = entry[1:5]
+        region = sheets["CT"].crop((col * 16, row * 16,
+                                    (col + w) * 16, (row + h) * 16))
+        return 16, fit16(region, "CT")
+    if src == "XF":                           # rect crop from a loose pack file
+        rel, x, y, w, h = entry[1:6]
+        im = Image.open(A / rel).convert("RGBA").crop((x, y, x + w, y + h))
+        return 16, fit16(im, "X")
     kind, path, cmsrc = SOURCES[src]
     if kind == "file16":
         rel = entry[1]
@@ -257,6 +434,26 @@ def main():
     order = b8 + b16                      # ids: all 8x8 first, then 16x16
     enum = [f"SPR_{f['name']}={i}" for i, f in enumerate(order)]
 
+    # animation pairs: NAME <-> NAME2, character groups only ("2" elsewhere
+    # means a variant, e.g. ROCK2/GALLEON2, and must not flicker)
+    ANIM_GROUPS = {"people", "beasts", "monsters"}
+    idx = {f["name"]: i for i, f in enumerate(order)}
+    grp_of = {f["name"]: f["group"] for f in order}
+    def is_frame2(n):
+        return (n.endswith("2") and n[:-1] in idx and grp_of[n] in ANIM_GROUPS)
+    orphans = [n for n in idx if n.endswith("2") and grp_of[n] in ANIM_GROUPS
+               and n[:-1] not in idx]
+    assert not orphans, f"frame-2 sprites without a base: {orphans}"
+    alt = []
+    for i, f in enumerate(order):
+        n = f["name"]
+        if is_frame2(n):
+            alt.append(idx[n[:-1]])
+        elif grp_of[n] in ANIM_GROUPS and (n + "2") in idx:
+            alt.append(idx[n + "2"])
+        else:
+            alt.append(i)
+
     def pack(nib):
         return [(nib[j] << 4) | nib[j + 1] for j in range(0, len(nib), 2)]
 
@@ -271,6 +468,8 @@ def main():
         "// ids >= SPR16_BASE are native 16x16 (drawn 1x).\n"
         f"enum : uint16_t {{ {', '.join(enum)}, SPR_COUNT={len(order)} }};\n"
         f"static const uint16_t SPR16_BASE = {len(b8)};\n"
+        f"static const uint16_t SPR_ALT[{len(order)}] = {{"
+        + ",".join(str(a) for a in alt) + "};\n"
         f"static const uint8_t SPR_PX[{len(b8)}][32] = {{\n" + "\n".join(r8) + "\n};\n"
         f"static const uint8_t SPR16_PX[{len(b16)}][128] = {{\n" + "\n".join(r16) + "\n};\n")
     print(f"wrote {OUT_H}: {len(b8)} 8x8 + {len(b16)} 16x16 = {len(order)} sprites, "
@@ -279,7 +478,14 @@ def main():
     cat_lines = ["<!-- SPRITES:BEGIN generated by spritegen.py -->",
                  "## Sprite catalog (engine-baked, all drawn 16x16 on screen)"]
     for grp, entries in CATALOG.items():
-        cat_lines.append(f"- {grp}: " + " · ".join(f"`SPR_{e[-2]}` {e[-1]}" for e in entries))
+        parts = []
+        for e in entries:
+            n = e[-2]
+            if is_frame2(n):
+                continue                  # sprA handles frames; hide from prompt
+            tag = " (anim)" if grp in ANIM_GROUPS and (n + "2") in idx else ""
+            parts.append(f"`SPR_{n}` {e[-1]}{tag}")
+        cat_lines.append(f"- {grp}: " + " · ".join(parts))
     cat_lines.append("<!-- SPRITES:END -->")
     cat = "\n".join(cat_lines)
     txt = PROMPT.read_text()
