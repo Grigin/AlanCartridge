@@ -2,9 +2,12 @@
 library/*
 !library/.gitkeep
 assets/*
+music/spectrumizer-main/*
 .idea/
 *.xml
 .DS_Store
 __pycache__/
 *.pyc
 build/
+sprite_sheets/*
+*.html
