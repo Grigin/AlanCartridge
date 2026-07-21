@@ -13,6 +13,7 @@ FQBN = os.environ.get("FORGE_FQBN", "esp32:esp32:axiometa_genesis_mini")
 PORT_HINT = os.environ.get("FORGE_PORT", "/dev/cu.usbmodem1101")
 MODEL = os.environ.get("FORGE_MODEL", "claude-sonnet-4-6")
 BAUD = 115200
+ZX_SPECTRUM_CHIP = os.environ.get("ZX_SPECTRUM_CHIP_URL", "")  # unset = no music
 
 CONTRACT = (ROOT / "ENGINE_PROMPT.md").read_text()
 GAME_EXAMPLES = sorted(ROOT.glob("example*.ino"))  # inserted into prompt
