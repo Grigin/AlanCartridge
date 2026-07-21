@@ -10,6 +10,7 @@
 #define TFT_DC     P2_IO2
 #define MATRIX_PIN P4_IO1
 #define DPAD_PIN   P1_IO0
+
 // Encoder — AX22 ports carry 1 analog (IO0) + 2 digital (IO1/IO2);
 // quadrature A/B on the digital pair, push on IO0. Comment out to disable.
 #define ENC_A      P3_IO1
@@ -60,6 +61,53 @@ static void _sprBlit(int id, int x, int y, uint8_t flags, int tint) {
 void spr(int id, int x, int y, uint8_t flags = 0)  { _sprBlit(id, x, y, flags, -1); }
 void sprT(int id, int x, int y, uint8_t col, uint8_t flags = 0) { _sprBlit(id, x, y, flags, col & 15); }
 
+// ── Level map: 20x8 cells of 8px starting at y=14, forged per game ──────────
+// '.' empty · '#' solid · 'P' player start · 'G' goal spot · 'S' spawn spot ·
+// legend letters = decor sprites (16x16, centered on the cell, may overlap).
+// The map constants are appended to game.ino by the forge, never hand-written.
+extern const char* GAME_MAP;         // 160 chars, row-major
+extern const char* GAME_MAP_KEYS;    // legend letters
+extern const int   GAME_MAP_SPR[];   // sprite id per legend letter
+static const int MAPW = 20, MAPH = 8, MAPY = 14;
+
+static char mapCell(int c, int r) {
+  if (c < 0 || c >= MAPW || r < 0 || r >= MAPH) return '.';
+  return GAME_MAP[r * MAPW + c];
+}
+bool mapSolid(float x, float y) {
+  return mapCell((int)x >> 3, ((int)y - MAPY) >> 3) == '#';
+}
+int mapCount(char ch) {
+  int n = 0;
+  for (int i = 0; i < MAPW * MAPH; i++) if (GAME_MAP[i] == ch) n++;
+  return n;
+}
+static int _mapNth(char ch, int idx) {
+  for (int i = 0; i < MAPW * MAPH; i++)
+    if (GAME_MAP[i] == ch && idx-- == 0) return i;
+  return -1;
+}
+float mapX(char ch, int idx) { int i = _mapNth(ch, idx); return i < 0 ? -1 : (i % MAPW) * 8 + 4; }
+float mapY(char ch, int idx) { int i = _mapNth(ch, idx); return i < 0 ? -1 : MAPY + (i / MAPW) * 8 + 4; }
+
+static void mapDraw() {                       // under the game layer each frame
+  int solidSpr = -1;
+  for (const char* k = GAME_MAP_KEYS; *k; k++)
+    if (*k == '#') solidSpr = GAME_MAP_SPR[k - GAME_MAP_KEYS];
+  for (int r = 0; r < MAPH; r++) for (int c = 0; c < MAPW; c++) {
+    char ch = mapCell(c, r);
+    if (ch == '.' || ch == 'P' || ch == 'G' || ch == 'S') continue;
+    int x = c * 8, y = MAPY + r * 8;
+    if (ch == '#') {
+      if (solidSpr >= 0) spr(solidSpr, x, y, SF_SMALL);
+      else { cv.fillRect(x, y, 8, 8, PAL[5]); cv.drawFastHLine(x, y, 8, PAL[1]); }
+      continue;
+    }
+    for (int i = 0; GAME_MAP_KEYS[i]; i++)
+      if (GAME_MAP_KEYS[i] == ch) { spr(GAME_MAP_SPR[i], x - 4, y - 4); break; }
+  }
+}
+
 // Input
 struct Input {
   int8_t dx = 0, dy = 0;   // normalized d-pad, -1/0/1 (level, every frame)
@@ -70,6 +118,11 @@ struct Input {
   uint32_t t = 0;          // frame counter (30 fps)
 };
 Input inp;
+
+void sprA(int id, int x, int y, uint8_t flags = 0) {  // animated: auto walk-cycle
+  if (id >= 0 && id < SPR_COUNT && ((inp.t >> 3) & 1)) id = SPR_ALT[id];
+  spr(id, x, y, flags);
+}
 
 // D-pad resistor ladder: bands ~0 / ~760 / ~1555 / ~2333(centre) / ~3170 / 4095
 // PADMAP — the ONE place to fix orientation. Defaults = decoded from your
@@ -115,14 +168,19 @@ static int serp(int r, int c) {              // logical row 0 = top → strip in
 static const uint8_t DIG[10][5] = {          // rows as 5-bit masks, bit4 = col0
   {0x0E,0x0A,0x0A,0x0A,0x0E},{0x04,0x0C,0x04,0x04,0x0E},
   {0x0E,0x02,0x0E,0x08,0x0E},{0x0E,0x02,0x0E,0x02,0x0E},
-  {0x0A,0x0A,0x0E,0x02,0x02},{0x0E,0x08,0x0E,0x02,0x0E},
+  {0x0A,0x0A,0x0E,0x02,0x08},  // 4: bottom row 0x08 is DELIBERATE for this
+                               // LED matrix — do not "correct" it
+  {0x0E,0x08,0x0E,0x02,0x0E},
   {0x0E,0x08,0x0E,0x0A,0x0E},{0x0E,0x02,0x04,0x04,0x04},
   {0x0E,0x0A,0x0E,0x0A,0x0E},{0x0E,0x0A,0x0E,0x02,0x0E}};
+static const uint8_t DIG10[5] =              // "10": 1 + closed ring 0, stored
+  {0x1D,0x15,0x15,0x15,0x1D};                // pre-mirrored (panel flips columns)
 void mxDigit(int n, uint32_t col) {
   matrix.clear();
-  if (n >= 0) { n %= 10;
+  if (n >= 0) {
+    const uint8_t* g = (n == 10) ? DIG10 : DIG[n % 10];
     for (int r = 0; r < 5; r++) for (int c = 0; c < 5; c++)
-      if (DIG[n][r] & (1 << (4 - c))) matrix.setPixelColor(serp(r, c), col);
+      if (g[r] & (1 << (4 - c))) matrix.setPixelColor(serp(r, c), col);
   }
   matrix.show();
 }
@@ -145,14 +203,16 @@ extern const int GAME_LIVES;                 // starting lives (1..9)
 extern const int GAME_GOAL;                  // objective count; engine wins at it
 extern const char* GAME_VERB;                // HUD verb, e.g. "CATCH"
 extern const char* GAME_HINT;                // title-card control hint, <= 20 chars
+extern const int GAME_BG;                    // background PAL index (engine fills it)
 void gameInit();                             // reset game state
 void gameUpdate(float dt);                   // logic @30fps; dt = 1/30
 void gameDraw();                             // draw world on cv (engine clears+blits)
 
 // Engine services for games
 long  score_ = 0;  int lives_ = 3;  int progress_ = 0;
-enum ShellState { TITLE, PLAY, OVER };
-ShellState shell = TITLE;  bool lastWin = false;
+int32_t hitAt_ = -1000;                       // last eLoseLife frame (cooldown)
+enum ShellState { TITLE, BRIEF, PLAY, OVER, BLANK };
+ShellState shell = BLANK;  bool lastWin = false;
 uint32_t stateAt = 0;
 
 float rnd()              { return (float)random(0, 1 << 16) / (1 << 16); }
@@ -181,6 +241,8 @@ void eGameOver(bool win) {
 }
 void eLoseLife() {
   if (shell != PLAY) return;
+  if ((int32_t)inp.t - hitAt_ < 30) return;   // 1s mercy cooldown: no multi-hits
+  hitAt_ = inp.t;
   lives_--; showLives();
   Serial.printf("{\"ev\":\"life\",\"left\":%d}\n", lives_);
   if (lives_ <= 0) eGameOver(false);
@@ -192,29 +254,89 @@ void eProgress(int d) {
   if (progress_ >= GAME_GOAL) { progress_ = GAME_GOAL; eGameOver(true); }
 }
 
+static void centerPrint(const char* s, int y, uint8_t size, uint16_t col) {
+  int x = (W - 6 * size * (int)strlen(s)) / 2;
+  cv.setTextSize(size); cv.setTextColor(col);
+  cv.setCursor(x < 2 ? 2 : x, y); cv.print(s);
+}
+
 static void enterTitle() {
   shell = TITLE; stateAt = millis();
   score_ = 0; lives_ = GAME_LIVES; progress_ = 0;
-  cv.fillScreen(PAL[1]);
-  cv.setTextSize(2); cv.setTextColor(PAL[10]);
-  cv.setCursor(8, 12); cv.print(GAME_TITLE);
-  cv.setTextSize(1); cv.setTextColor(PAL[6]);
-  cv.setCursor(8, 38); cv.print(GAME_BLURB);
-  cv.setTextColor(PAL[10]);
-  cv.setCursor(8, 50); cv.printf("%s %d", GAME_VERB, GAME_GOAL);
-  cv.setTextColor(PAL[12]);
-  cv.setCursor(8, 60); cv.print(GAME_HINT);
-  cv.setCursor(8, 70); cv.setTextColor(PAL[7]); cv.print("CENTRE to start");
+  // grey cartridge with a paper label
+  cv.fillScreen(PAL[0]);
+  cv.fillRoundRect(1, 1, 158, 78, 5, PAL[5]);
+  cv.drawRoundRect(1, 1, 158, 78, 5, PAL[0]);
+  cv.drawFastHLine(6, 3, 148, PAL[6]);            // top sheen
+  for (int gy = 7; gy <= 15; gy += 4) {           // grip ridges
+    cv.drawFastHLine(10, gy, 140, PAL[1]);
+    cv.drawFastHLine(10, gy + 1, 140, PAL[6]);
+  }
+  cv.fillRoundRect(6, 19, 148, 48, 2, PAL[7]);    // paper label
+  cv.drawRoundRect(6, 19, 148, 48, 2, PAL[5]);
+  uint8_t sh = 0;                                 // accent stripe: colour keyed
+  for (const char* p = GAME_TITLE; *p; p++)       // to the title, so each game
+    sh = sh * 31 + *p;                            // gets its own label livery
+  static const uint8_t STRIPE_C[] = {8, 9, 11, 12, 14, 13, 2, 3};
+  cv.fillRect(8, 21, 144, 3, PAL[STRIPE_C[sh % sizeof(STRIPE_C)]]);
+  if (6 * 2 * (int)strlen(GAME_TITLE) <= 148)     // auto-fit: any length, one line
+    centerPrint(GAME_TITLE, 26, 2, PAL[0]);
+  else
+    centerPrint(GAME_TITLE, 29, 1, PAL[0]);
+  // blurb: one line up to 24 chars, else word-wrap onto two label lines
+  int blen = strlen(GAME_BLURB);
+  if (blen <= 24) centerPrint(GAME_BLURB, 48, 1, PAL[5]);
+  else {
+    int cut = 24;
+    for (int i = 24; i > 10; i--) if (GAME_BLURB[i] == ' ') { cut = i; break; }
+    char l1[26], l2[26];
+    snprintf(l1, sizeof(l1), "%.*s", cut, GAME_BLURB);
+    snprintf(l2, sizeof(l2), "%.24s", GAME_BLURB + cut + (GAME_BLURB[cut] == ' ' ? 1 : 0));
+    centerPrint(l1, 45, 1, PAL[5]);
+    centerPrint(l2, 53, 1, PAL[5]);
+  }
+  centerPrint("CENTRE to start", 70, 1, PAL[7]);
   tft.drawRGBBitmap(0, 0, cv.getBuffer(), W, H);
   mxPips(25, matrix.Color(40, 40, 120));
   Serial.printf("{\"ev\":\"title\",\"title\":\"%s\"}\n", GAME_TITLE);
 }
 static void enterPlay() {
   randomSeed(GAME_SEED);
-  score_ = 0; lives_ = GAME_LIVES; progress_ = 0; inp.t = 0;
+  score_ = 0; lives_ = GAME_LIVES; progress_ = 0; inp.t = 0; hitAt_ = -1000;
   gameInit(); showLives();
   shell = PLAY; stateAt = millis();
   Serial.println("{\"ev\":\"play\"}");
+}
+
+// Boot gate: the cartridge "evaporates" on powerdown — the console comes up
+// as an empty slot and only a bless from the forge (any serial host) revives
+// it. Untethered power-ups stay blank; flash is untouched, so revival is
+// instant once the pipeline reattaches.
+static void drawBlank(bool showText) {
+  cv.fillScreen(PAL[0]);
+  cv.drawRoundRect(30, 14, 100, 52, 4, PAL[5]);   // empty cartridge slot
+  cv.drawRoundRect(34, 18, 92, 44, 3, PAL[1]);
+  for (int gy = 26; gy <= 38; gy += 6)            // ghost grip ridges
+    cv.drawFastHLine(42, gy, 76, PAL[1]);
+  if (showText) centerPrint("INSERT CARTRIDGE", 48, 1, PAL[6]);
+  tft.drawRGBBitmap(0, 0, cv.getBuffer(), W, H);
+}
+static void enterBlank() {
+  shell = BLANK; stateAt = millis();
+  drawBlank(true);
+  matrix.clear(); matrix.show();                  // no lives on an empty slot
+}
+
+// Pre-round briefing: controls steady 2s, blinking 1s, then play
+static void enterBrief() { shell = BRIEF; stateAt = millis(); }
+static void drawBrief(bool showHint) {
+  cv.fillScreen(PAL[1]);
+  centerPrint(GAME_TITLE, 12, 1, PAL[6]);
+  char ob[24]; snprintf(ob, sizeof(ob), "%s %d", GAME_VERB, GAME_GOAL);
+  centerPrint(ob, 28, 1, PAL[10]);
+  if (showHint) centerPrint(GAME_HINT, 44, 1, PAL[7]);
+  centerPrint("get ready...", 66, 1, PAL[5]);
+  tft.drawRGBBitmap(0, 0, cv.getBuffer(), W, H);
 }
 
 static void pollInput() {
@@ -245,22 +367,52 @@ static void pollSerial() {
     char c = Serial.read();
     if (c == '\n' || n >= sizeof(buf) - 1) {
       buf[n] = 0; n = 0;
-      if (!strcmp(buf, "start")) enterPlay();
+      if (!strcmp(buf, "start")) { shell == BLANK ? enterTitle() : enterPlay(); }
       if (!strcmp(buf, "title")) enterTitle();
-      if (!strcmp(buf, "ping"))  Serial.println("{\"ev\":\"pong\"}");
+      if (!strcmp(buf, "bless") && shell == BLANK) enterTitle();
+      if (!strcmp(buf, "ping")) {           // pong reports the current screen so
+        static const char* SH[] = {"title", "brief", "play", "over", "blank"};
+        Serial.printf("{\"ev\":\"pong\",\"shell\":\"%s\"}\n", SH[shell]);
+      }                                     // the loop never flashes mid-game
+      if (!strcmp(buf, "frame")) {          // mirror: @F <b64 of the framebuffer>
+        static const char B64[] =
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+        const uint8_t* fb = (const uint8_t*)cv.getBuffer();
+        const uint32_t N = (uint32_t)W * H * 2;
+        char out[512]; uint16_t o = 0;
+        Serial.print("@F ");
+        for (uint32_t i = 0; i < N; i += 3) {
+          uint32_t v = (uint32_t)fb[i] << 16;
+          if (i + 1 < N) v |= (uint32_t)fb[i + 1] << 8;
+          if (i + 2 < N) v |= fb[i + 2];
+          out[o++] = B64[(v >> 18) & 63];
+          out[o++] = B64[(v >> 12) & 63];
+          out[o++] = (i + 1 < N) ? B64[(v >> 6) & 63] : '=';
+          out[o++] = (i + 2 < N) ? B64[v & 63] : '=';
+          if (o >= 508) { Serial.write((const uint8_t*)out, o); o = 0; }
+        }
+        if (o) Serial.write((const uint8_t*)out, o);
+        Serial.println();
+      }
     } else if (c != '\r') buf[n++] = c;
   }
 }
 
 // ── Lifecycle — the primary .ino just calls these two ────────────────────────
 void engineSetup() {
-  Serial.begin(115200);
-  delay(300);
-  fspi.begin(SCK, MISO, MOSI);
-  tft.initR(INITR_MINI160x80);   // if colours/offset look wrong: INITR_MINI160x80_PLUGIN
-  tft.invertDisplay(true);
+  fspi.begin(SCK, MISO, MOSI);   // panel first: swap the power-on snow for
+  tft.initR(INITR_MINI160x80);   // clean black before the serial settle
+  tft.invertDisplay(false);      // panel is TRUE-polarity: INVON negates every
+                                 // frame (the white INSERT CARTRIDGE was this).
+                                 // Judge against the GUI mirror, never memory —
+                                 // the false-polarity "test" of 19 Jul was
+                                 // never actually flashed, so nothing before
+                                 // ~13:00 that day disproves this setting.
   tft.setRotation(3);
   tft.setSPISpeed(26000000);     // try 40000000 if stable
+  tft.fillScreen(0);
+  Serial.begin(115200);
+  delay(300);
   matrix.begin(); matrix.setBrightness(20); matrix.show();
   pinMode(DPAD_PIN, INPUT);
 #ifdef ENC_A
@@ -272,7 +424,7 @@ void engineSetup() {
   pinMode(ENC_SW, INPUT_PULLUP);
 #endif
   Serial.printf("{\"ev\":\"boot\",\"title\":\"%s\"}\n", GAME_TITLE);
-  enterTitle();
+  enterBlank();                  // empty slot until the forge blesses the boot
 }
 
 void engineLoop() {
@@ -284,13 +436,20 @@ void engineLoop() {
   pollInput();
   switch (shell) {
     case TITLE:
-      if (inp.a || now - stateAt > 6000) enterPlay();
+      if (inp.a) enterBrief();               // no autostart — centre only
       break;
+    case BRIEF: {
+      uint32_t el = now - stateAt;
+      drawBrief(el < 2000 || ((el >> 7) & 1));   // 2s steady, 1s ~4Hz blink
+      if (el >= 3000) enterPlay();
+      break;
+    }
     case PLAY:
       inp.t++;
       gameUpdate(1.0f / 30.0f);
       if (shell != PLAY) break;              // game ended inside update
-      cv.fillScreen(PAL[0]);
+      cv.fillScreen(PAL[GAME_BG & 15]);
+      mapDraw();                             // level under the game layer
       gameDraw();
       cv.setTextSize(1); cv.setTextColor(PAL[6]);   // engine score strip
       cv.setCursor(2, 1); cv.printf("%ld", score_);
@@ -304,5 +463,14 @@ void engineLoop() {
     case OVER:
       if (now - stateAt > 3000 && (inp.a || now - stateAt > 8000)) enterTitle();
       break;
+    case BLANK: {                            // empty slot: buttons dead, wait
+      drawBlank(!(((now - stateAt) / 700) & 1));
+      static uint32_t hello = 0;
+      if (now - hello > 2000) {              // re-announce for late hosts
+        hello = now;
+        Serial.println("{\"ev\":\"blank\"}");
+      }
+      break;
+    }
   }
 }
