@@ -38,3 +38,22 @@ python gui.py                             # web GUI over the same verbs
 An [Axiometa](https://axiometa.io) Genesis Mini handheld (ESP32-S3): TFT screen, d-pad, encoder and a 5×5 LED matrix as snap-together modules. Music plays on a real AY-3-8912 behind a small HTTP server. No music box configured = games ship silent.
 
 ![Genesis Mini ports: P1 d-pad, P2 TFT screen, P3 encoder, P4 LED matrix](docs/genesis-mini-board.png)
+
+## References & gratitude
+
+The 8-bit ZX Spectrum music is only possible thanks to **[PapAYa](https://github.com/gasman/papaya)** by **Matt Westcott (gasman)**: an open-source Raspberry Pi header carrying two AY-3-8912 chips, published with both the code and the KiCad files. I ported gasman's code to the Raspberry Pi 5 for another project of mine that's currently in progress, and will open-source that port later, together with the HTTP server add-on vibe-coded during this hackathon.
+
+The games are drawn with a curated set of sprites from these packs:
+
+- [Paper Pixels](https://v3x3d.itch.io/paper-pixels) by VEXED
+- [Micro Roguelike](https://kenney.nl/assets/micro-roguelike), [PICO-8 Platformer](https://kenney.nl/assets/pico-8-platformer) and [Racing Pack](https://kenney.nl/assets/racing-pack) by Kenney
+- [Dungeon Tileset II](https://0x72.itch.io/dungeontileset-ii) by 0x72
+- [8x8 PICO-8 Tile Set 1](https://opengameart.org/content/8x8-pico-8-tile-set-1) by hawkbirdtree
+- [Chicken Sprites](https://opengameart.org/content/chicken-sprites) by Shepardskin
+- [Scallywag Ships](https://foozlecc.itch.io/scallywag-ships) and [Void Main Ship](https://foozlecc.itch.io/void-main-ship) by Foozle
+- [Animated Mafia Guys](https://printer-not-found.itch.io/animated-mafia-guys-free-cc0) by Printer Not Found
+- [Goose](https://duckhive.itch.io/goose) by DuckHive
+- [CreatorPack](https://jonathan-so.itch.io/creatorpack) by Jonathan So
+- [City](https://piiixl.itch.io/city) by PIIIXL
+
+Every pixel on the little screen exists because someone drew it with care and gave it away. Support indie designers and developers; their craft is what makes weekend projects like this possible.
